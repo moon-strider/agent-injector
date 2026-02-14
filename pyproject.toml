@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-injector"
+dynamic = ["version"]
+authors = [
+    { name = "moon-strider" },
+]
+description = "MCP server that spawns Claude Code sub-agents powered by alternative Anthropic-compatible models (MiniMax, GLM etc)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = ["mcp", "claude", "claude-code", "minimax", "glm", "agent", "anthropic"]
+dependencies = [
+    "mcp>=1.0.2",
+]
+
+[project.scripts]
+agent-injector = "agent_injector:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_injector"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+path = "src/agent_injector/__init__.py"
