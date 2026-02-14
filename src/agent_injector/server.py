@@ -113,6 +113,7 @@ async def _spawn_task(
         "--verbose",
         "--model", "sonnet",
         "--max-turns", str(max_turns),
+        "--dangerously-skip-permissions",
     ]
 
     if tools:
