@@ -52,7 +52,9 @@ def _load_dotenv():
 def _build_env(model: str) -> dict[str, str]:
     env = dict(os.environ)
     env["ANTHROPIC_BASE_URL"] = MINIMAX_BASE_URL
+    env["ANTHROPIC_API_KEY"] = MINIMAX_API_KEY
     env["ANTHROPIC_AUTH_TOKEN"] = MINIMAX_API_KEY
+    env["ANTHROPIC_MODEL"] = model
     env["ANTHROPIC_DEFAULT_OPUS_MODEL"] = model
     env["ANTHROPIC_DEFAULT_SONNET_MODEL"] = model
     env["ANTHROPIC_DEFAULT_HAIKU_MODEL"] = model
@@ -68,6 +70,23 @@ def _now() -> float:
     return asyncio.get_running_loop().time()
 
 
+async def _graceful_kill(proc: asyncio.subprocess.Process, timeout_term: int = 5, timeout_kill: int = 3):
+    if proc.returncode is not None:
+        return
+    try:
+        proc.terminate()
+        await asyncio.wait_for(proc.wait(), timeout=timeout_term)
+    except asyncio.TimeoutError:
+        if proc.returncode is None:
+            proc.kill()
+            try:
+                await asyncio.wait_for(proc.wait(), timeout=timeout_kill)
+            except asyncio.TimeoutError:
+                pass
+    except ProcessLookupError:
+        pass
+
+
 async def _spawn_task(
     prompt: str,
     model: str | None = None,
@@ -78,7 +97,7 @@ async def _spawn_task(
 ) -> str:
     task_id = uuid.uuid4().hex[:8]
     model = model or MINIMAX_MODEL
-    tools = allowed_tools or ["Read", "Glob", "Grep", "Bash", "Edit", "Write"]
+    tools = allowed_tools if allowed_tools else ["Read", "Glob", "Grep", "Bash", "Edit", "Write"]
 
     cwd = working_directory or Path.home().as_posix()
     if not Path(cwd).is_dir():
@@ -90,9 +109,11 @@ async def _spawn_task(
         "--output-format", "stream-json",
         "--verbose",
         "--model", "sonnet",
-        "--allowedTools", ",".join(tools),
         "--max-turns", str(max_turns),
     ]
+
+    if tools:
+        args.extend(["--allowedTools", ",".join(tools)])
 
     env = _build_env(model)
 
@@ -129,6 +150,7 @@ async def _spawn_task(
 async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: int):
     try:
         async def read_stdout():
+            assert proc.stdout is not None
             while True:
                 chunk = await proc.stdout.read(4096)
                 if not chunk:
@@ -138,6 +160,7 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
                 task["partial_output"] = task["output"][-2000:]
 
         async def read_stderr():
+            assert proc.stderr is not None
             while True:
                 chunk = await proc.stderr.read(4096)
                 if not chunk:
@@ -154,17 +177,17 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
 
     except asyncio.TimeoutError:
         logger.warning(f"Task {task['id']} timed out after {timeout}s")
-        try:
-            proc.terminate()
-            await asyncio.sleep(5)
-            if proc.returncode is None:
-                proc.kill()
-        except ProcessLookupError:
-            pass
+        await _graceful_kill(proc)
         task["status"] = "timeout"
+
+    except asyncio.CancelledError:
+        await _graceful_kill(proc)
+        task["status"] = "cancelled"
+        raise
 
     except Exception as e:
         logger.error(f"Task {task['id']} stream error: {e}")
+        await _graceful_kill(proc)
         task["status"] = "failed"
         task["stderr_output"] += f"\nInternal error: {e}"
 
@@ -211,14 +234,6 @@ async def _cleanup_loop():
             now = _now()
             to_delete = []
             for tid, task in list(tasks.items()):
-                if task["status"] == "running" and task["process"]:
-                    if (now - task["started_at"]) > task["timeout"]:
-                        try:
-                            task["process"].terminate()
-                        except ProcessLookupError:
-                            pass
-                        task["status"] = "timeout"
-                        task["completed_at"] = now
                 if task["status"] != "running" and task["completed_at"]:
                     if (now - task["completed_at"]) > TASK_TTL:
                         to_delete.append(tid)
@@ -361,7 +376,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         return await _handle_tool(name, arguments)
     except Exception as e:
         logger.error(f"Tool {name} error: {e}")
-        return [TextContent(type="text", text=str(e), isError=True)]
+        return [TextContent(type="text", text=json.dumps({"error": str(e)}))]
 
 
 async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
@@ -430,16 +445,14 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
         task = tasks.get(arguments["task_id"])
         if not task:
             return [TextContent(type="text", text=json.dumps({"error": "Task not found"}))]
-        if task["status"] == "running" and task["process"]:
-            try:
-                task["process"].terminate()
-                await asyncio.sleep(5)
-                if task["process"].returncode is None:
-                    task["process"].kill()
-            except ProcessLookupError:
-                pass
+        proc = task["process"]
+        if task["status"] == "running" and proc is not None:
+            await _graceful_kill(proc)
             task["status"] = "cancelled"
-            task["completed_at"] = _now()
+            try:
+                task["completed_at"] = _now()
+            except RuntimeError:
+                task["completed_at"] = task["started_at"]
         return [TextContent(type="text", text=json.dumps({"task_id": task["id"], "status": task["status"]}))]
 
     elif name == "llm_batch_start":
@@ -517,8 +530,9 @@ async def main_async():
     finally:
         cleanup_task.cancel()
         for task in tasks.values():
-            if task["status"] == "running" and task["process"]:
+            proc = task.get("process")
+            if task["status"] == "running" and proc is not None:
                 try:
-                    task["process"].terminate()
+                    proc.terminate()
                 except ProcessLookupError:
                     pass
