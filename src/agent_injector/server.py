@@ -161,12 +161,65 @@ async def _spawn_task(
         "completed_at": None,
         "timeout": timeout_seconds,
         "process": proc,
+        "activity": {"summary": "Initializing...", "tool": None, "turns": 0, "last_message": ""},
+        "_line_buf": "",
     }
     tasks[task_id] = task
 
     asyncio.create_task(_read_stream(task, proc, timeout_seconds))
 
     return task_id
+
+
+def _parse_activity(task: dict, line: str):
+    try:
+        obj = json.loads(line)
+    except (json.JSONDecodeError, TypeError):
+        return
+
+    msg_type = obj.get("type")
+    activity = task["activity"]
+
+    if msg_type == "assistant":
+        activity["turns"] += 1
+        message = obj.get("message", {})
+        content_blocks = message.get("content", [])
+        for block in content_blocks:
+            if isinstance(block, dict) and block.get("type") == "text":
+                text = block.get("text", "")
+                if text:
+                    activity["last_message"] = text[:200]
+                    activity["summary"] = f"Turn {activity['turns']}: thinking..."
+            elif isinstance(block, dict) and block.get("type") == "tool_use":
+                tool_name = block.get("name", "unknown")
+                activity["tool"] = tool_name
+                tool_input = block.get("input", {})
+                detail = ""
+                if tool_name in ("Read", "Glob", "Grep") and "path" in tool_input:
+                    detail = f" {tool_input['path']}"
+                elif tool_name == "Edit" and "file_path" in tool_input:
+                    detail = f" {tool_input['file_path']}"
+                elif tool_name == "Write" and "file_path" in tool_input:
+                    detail = f" {tool_input['file_path']}"
+                elif tool_name == "Bash" and "command" in tool_input:
+                    cmd = tool_input["command"]
+                    detail = f" `{cmd[:80]}`"
+                elif tool_name == "WebSearch" and "query" in tool_input:
+                    detail = f" \"{tool_input['query'][:80]}\""
+                elif tool_name == "WebFetch" and "url" in tool_input:
+                    detail = f" {tool_input['url'][:80]}"
+                activity["summary"] = f"Turn {activity['turns']}: {tool_name}{detail}"
+
+    elif msg_type == "tool_use":
+        tool_name = obj.get("name") or obj.get("tool", "unknown")
+        activity["tool"] = tool_name
+        activity["summary"] = f"Turn {activity['turns']}: using {tool_name}"
+
+    elif msg_type == "tool_result":
+        activity["summary"] = f"Turn {activity['turns']}: processing {activity.get('tool', 'tool')} result"
+
+    elif msg_type == "result":
+        activity["summary"] = "Completed"
 
 
 async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: int):
@@ -176,10 +229,19 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
             while True:
                 chunk = await proc.stdout.read(4096)
                 if not chunk:
+                    if task["_line_buf"]:
+                        _parse_activity(task, task["_line_buf"])
+                        task["_line_buf"] = ""
                     break
                 text = chunk.decode("utf-8", errors="replace")
                 task["output"] += text
                 task["partial_output"] = task["output"][-2000:]
+                task["_line_buf"] += text
+                while "\n" in task["_line_buf"]:
+                    line, task["_line_buf"] = task["_line_buf"].split("\n", 1)
+                    line = line.strip()
+                    if line:
+                        _parse_activity(task, line)
 
         async def read_stderr():
             assert proc.stderr is not None
@@ -452,7 +514,7 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
             return [TextContent(type="text", text=json.dumps({"error": "Task not found", "task_id": arguments["task_id"]}))]
         return [TextContent(type="text", text=json.dumps({
             **_task_summary(task),
-            "partial_output": task["partial_output"][-500:],
+            "activity": task.get("activity", {}),
         }))]
 
     elif name == "llm_result":
@@ -515,7 +577,10 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
             if not task:
                 results.append({"id": entry["id"], "status": "not_found"})
                 continue
-            results.append({"id": entry["id"], **_task_summary(task)})
+            summary = {"id": entry["id"], **_task_summary(task)}
+            if task["status"] == "running":
+                summary["activity"] = task.get("activity", {})
+            results.append(summary)
         all_done = all(r["status"] != "running" for r in results)
         return [TextContent(type="text", text=json.dumps({"batch_id": arguments["batch_id"], "all_completed": all_done, "tasks": results}))]
 
