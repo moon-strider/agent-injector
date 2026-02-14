@@ -85,8 +85,15 @@ You have access to the "agent-injector" MCP tools (llm_run, llm_start, llm_poll,
 
 Rules:
 - NEVER pass working_directory. Omit it entirely.
-- Prompts must be self-contained — the sub-agent has no access to this conversation. Include all context, file paths, and constraints directly in the prompt.
 - Sub-agents do NOT have access to your MCP servers, browser, or Notion.
+- ALWAYS pass the "context" parameter with a summary of relevant information the sub-agent needs. The sub-agent has NO access to this conversation — you must generate context yourself.
+
+Context parameter:
+- Every call to llm_run, llm_start, or llm_batch_start accepts an optional "context" string.
+- Use it to pass background info, file contents, constraints, prior decisions — anything the sub-agent needs to do its job.
+- The context is injected into the sub-agent's prompt inside <context> tags before the task itself.
+- Keep context concise but sufficient. Summarize — don't dump entire conversations.
+- Example: if the user asks to refactor a file, read the file yourself first, then pass its contents (or a summary) as context along with the refactoring instructions as the prompt.
 
 Tool selection:
 - llm_run — quick tasks under ~2 minutes, blocks until done
