@@ -20,11 +20,11 @@ MINIMAX_BASE_URL = os.environ.get("MINIMAX_BASE_URL", "https://api.minimax.io/an
 MINIMAX_API_KEY = os.environ.get("MINIMAX_API_KEY", "")
 MINIMAX_MODEL = os.environ.get("MINIMAX_MODEL", "MiniMax-M2.5")
 
-DEFAULT_TIMEOUT = 300
-DEFAULT_MAX_TURNS = 50
+DEFAULT_TIMEOUT = 1200
+DEFAULT_MAX_TURNS = 150
 MAX_CONCURRENT = 10
 CLEANUP_INTERVAL = 30
-TASK_TTL = 600
+TASK_TTL = 1500
 
 tasks: dict[str, dict[str, Any]] = {}
 batches: dict[str, list[dict[str, Any]]] = {}
@@ -60,6 +60,22 @@ def _build_env(model: str) -> dict[str, str]:
     env["ANTHROPIC_DEFAULT_HAIKU_MODEL"] = model
     env["DISABLE_PROMPT_CACHING"] = "1"
     return env
+
+
+def _build_mcp_config() -> str:
+    api_host = MINIMAX_BASE_URL.replace("/anthropic", "") if MINIMAX_BASE_URL.endswith("/anthropic") else MINIMAX_BASE_URL
+    return json.dumps({
+        "mcpServers": {
+            "minimax-search": {
+                "command": "uvx",
+                "args": ["minimax-coding-plan-mcp", "-y"],
+                "env": {
+                    "MINIMAX_API_KEY": MINIMAX_API_KEY,
+                    "MINIMAX_API_HOST": api_host,
+                },
+            }
+        }
+    })
 
 
 def _active_count() -> int:
@@ -114,6 +130,8 @@ async def _spawn_task(
         "--model", "sonnet",
         "--max-turns", str(max_turns),
         "--dangerously-skip-permissions",
+        "--disallowedTools", "",
+        "--mcp-config", _build_mcp_config(),
     ]
 
     if tools:
