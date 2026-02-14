@@ -88,6 +88,7 @@ async def _spawn_task(
         "claude",
         "-p", prompt,
         "--output-format", "stream-json",
+        "--verbose",
         "--model", "sonnet",
         "--allowedTools", ",".join(tools),
         "--max-turns", str(max_turns),
