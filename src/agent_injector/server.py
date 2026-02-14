@@ -1,7 +1,7 @@
 import asyncio
+import json
 import logging
 import os
-import signal
 import sys
 import uuid
 from pathlib import Path
@@ -64,6 +64,10 @@ def _active_count() -> int:
     return sum(1 for t in tasks.values() if t["status"] == "running")
 
 
+def _now() -> float:
+    return asyncio.get_running_loop().time()
+
+
 async def _spawn_task(
     prompt: str,
     model: str | None = None,
@@ -75,7 +79,10 @@ async def _spawn_task(
     task_id = uuid.uuid4().hex[:8]
     model = model or MINIMAX_MODEL
     tools = allowed_tools or ["Read", "Glob", "Grep", "Bash", "Edit", "Write"]
-    cwd = working_directory or os.getcwd()
+
+    cwd = working_directory or Path.home().as_posix()
+    if not Path(cwd).is_dir():
+        raise FileNotFoundError(f"Working directory does not exist: {cwd}")
 
     args = [
         "claude",
@@ -105,7 +112,7 @@ async def _spawn_task(
         "stderr_output": "",
         "partial_output": "",
         "exit_code": None,
-        "started_at": asyncio.get_event_loop().time(),
+        "started_at": _now(),
         "completed_at": None,
         "timeout": timeout_seconds,
         "process": proc,
@@ -155,17 +162,19 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
         task["status"] = "timeout"
 
     except Exception as e:
-        logger.error(f"Task {task['id']} error: {e}")
+        logger.error(f"Task {task['id']} stream error: {e}")
         task["status"] = "failed"
         task["stderr_output"] += f"\nInternal error: {e}"
 
     finally:
-        task["completed_at"] = asyncio.get_event_loop().time()
+        try:
+            task["completed_at"] = _now()
+        except RuntimeError:
+            task["completed_at"] = task["started_at"]
         task["process"] = None
 
 
 def _extract_result(raw: str) -> str:
-    import json
     lines = raw.strip().split("\n")
     for line in reversed(lines):
         try:
@@ -180,7 +189,10 @@ def _extract_result(raw: str) -> str:
 
 
 def _task_summary(task: dict) -> dict:
-    now = asyncio.get_event_loop().time()
+    try:
+        now = _now()
+    except RuntimeError:
+        now = task["started_at"]
     return {
         "task_id": task["id"],
         "status": task["status"],
@@ -192,23 +204,28 @@ def _task_summary(task: dict) -> dict:
 
 async def _cleanup_loop():
     while True:
-        await asyncio.sleep(CLEANUP_INTERVAL)
-        now = asyncio.get_event_loop().time()
-        to_delete = []
-        for tid, task in tasks.items():
-            if task["status"] == "running" and task["process"]:
-                if (now - task["started_at"]) > task["timeout"]:
-                    try:
-                        task["process"].terminate()
-                    except ProcessLookupError:
-                        pass
-                    task["status"] = "timeout"
-                    task["completed_at"] = now
-            if task["status"] != "running" and task["completed_at"]:
-                if (now - task["completed_at"]) > TASK_TTL:
-                    to_delete.append(tid)
-        for tid in to_delete:
-            del tasks[tid]
+        try:
+            await asyncio.sleep(CLEANUP_INTERVAL)
+            now = _now()
+            to_delete = []
+            for tid, task in list(tasks.items()):
+                if task["status"] == "running" and task["process"]:
+                    if (now - task["started_at"]) > task["timeout"]:
+                        try:
+                            task["process"].terminate()
+                        except ProcessLookupError:
+                            pass
+                        task["status"] = "timeout"
+                        task["completed_at"] = now
+                if task["status"] != "running" and task["completed_at"]:
+                    if (now - task["completed_at"]) > TASK_TTL:
+                        to_delete.append(tid)
+            for tid in to_delete:
+                del tasks[tid]
+        except asyncio.CancelledError:
+            raise
+        except Exception as e:
+            logger.error(f"Cleanup loop error: {e}")
 
 
 @server.list_tools()
@@ -338,8 +355,14 @@ async def list_tools() -> list[Tool]:
 
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
-    import json
+    try:
+        return await _handle_tool(name, arguments)
+    except Exception as e:
+        logger.error(f"Tool {name} error: {e}")
+        return [TextContent(type="text", text=str(e), isError=True)]
 
+
+async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     if name == "llm_run":
         if _active_count() >= MAX_CONCURRENT:
             return [TextContent(type="text", text=json.dumps({"error": "Too many concurrent tasks", "active": _active_count(), "max": MAX_CONCURRENT}))]
@@ -414,7 +437,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             except ProcessLookupError:
                 pass
             task["status"] = "cancelled"
-            task["completed_at"] = asyncio.get_event_loop().time()
+            task["completed_at"] = _now()
         return [TextContent(type="text", text=json.dumps({"task_id": task["id"], "status": task["status"]}))]
 
     elif name == "llm_batch_start":
