@@ -1,9 +1,12 @@
 import asyncio
 import json
 import logging
+import logging.handlers
 import os
 import sys
+import time
 import uuid
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -13,8 +16,33 @@ from mcp.server.lowlevel.server import NotificationOptions
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 
+LOG_DIR = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state")) / "agent-injector"
+LOG_RETENTION_DAYS = 7
+
 logging.basicConfig(level=logging.INFO, stream=sys.stderr)
 logger = logging.getLogger("agent-injector")
+
+
+def _setup_file_logging():
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_file = LOG_DIR / f"{datetime.now().strftime('%Y-%m-%d')}.log"
+    handler = logging.FileHandler(log_file, encoding="utf-8")
+    handler.setLevel(logging.DEBUG)
+    handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s"))
+    logging.getLogger().addHandler(handler)
+    logger.info(f"Log file: {log_file}")
+    _rotate_logs()
+
+
+def _rotate_logs():
+    cutoff = time.time() - LOG_RETENTION_DAYS * 86400
+    for f in LOG_DIR.glob("*.log"):
+        try:
+            if f.stat().st_mtime < cutoff:
+                f.unlink()
+                logger.debug(f"Rotated old log: {f.name}")
+        except OSError:
+            pass
 
 MINIMAX_BASE_URL = os.environ.get("MINIMAX_BASE_URL", "https://api.minimax.io/anthropic")
 MINIMAX_API_KEY = os.environ.get("MINIMAX_API_KEY", "")
@@ -148,6 +176,9 @@ async def _spawn_task(
         env=env,
     )
 
+    logger.info(f"Task {task_id} spawned: model={model} cwd={cwd} max_turns={max_turns} timeout={timeout_seconds}s")
+    logger.debug(f"Task {task_id} prompt: {prompt[:200]}")
+
     task = {
         "id": task_id,
         "status": "running",
@@ -258,6 +289,9 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
 
         task["exit_code"] = proc.returncode
         task["status"] = "completed" if proc.returncode == 0 else "failed"
+        logger.info(f"Task {task['id']} {task['status']} exit_code={proc.returncode} turns={task['activity']['turns']}")
+        if task["status"] == "failed" and task["stderr_output"]:
+            logger.error(f"Task {task['id']} stderr: {task['stderr_output'][-500:]}")
 
     except asyncio.TimeoutError:
         logger.warning(f"Task {task['id']} timed out after {timeout}s")
@@ -281,6 +315,43 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
         except RuntimeError:
             task["completed_at"] = task["started_at"]
         task["process"] = None
+
+
+USAGE_INSTRUCTIONS = """You have access to the "agent-injector" MCP tools. These tools spawn Claude Code sub-agents powered by MiniMax M2.5.
+
+Available tools:
+- llm_run — Run a task synchronously (blocks until done). Best for quick tasks under ~2 min.
+- llm_start — Start a background task, returns a task_id for polling.
+- llm_poll — Check status and current activity of a running task.
+- llm_result — Get the full result of a completed task.
+- llm_cancel — Kill a running task.
+- llm_batch_start — Start multiple tasks in parallel, get a batch_id.
+- llm_batch_poll — Check status of all tasks in a batch at once.
+- llm_list_tasks — List all active and recent tasks.
+
+Rules:
+- NEVER pass working_directory. Omit it entirely.
+- Sub-agents do NOT have access to your MCP servers, browser, or Notion.
+- ALWAYS pass the "context" parameter with a summary of relevant information the sub-agent needs. The sub-agent has NO access to this conversation — you must generate context yourself.
+
+Context parameter:
+- Every call to llm_run, llm_start, or llm_batch_start accepts an optional "context" string.
+- Use it to pass background info, file contents, constraints, prior decisions — anything the sub-agent needs to do its job.
+- The context is injected into the sub-agent's prompt inside <context> tags before the task itself.
+- Keep context concise but sufficient. Summarize — don't dump entire conversations.
+- Example: if the user asks to refactor a file, read the file yourself first, then pass its contents (or a summary) as context along with the refactoring instructions as the prompt.
+
+Tool selection:
+- llm_run — quick tasks under ~2 minutes, blocks until done
+- llm_start → llm_poll → llm_result — longer tasks (start, poll every 10-15s, fetch result when done)
+- llm_batch_start → llm_batch_poll — multiple independent tasks in parallel
+
+Polling:
+- llm_poll returns an "activity" object with: summary (what the agent is doing right now), tool (current tool), turns (how many turns completed), last_message (agent's last thought).
+- Use this to monitor progress without waiting for completion.
+
+Default allowed tools for sub-agents: Read, Glob, Grep, Bash, Edit, Write. Override with allowed_tools parameter.
+Sub-agents also have access to MiniMax web_search and understand_image MCP tools by default."""
 
 
 def _extract_result(raw: str) -> str:
@@ -454,6 +525,11 @@ async def list_tools() -> list[Tool]:
             description="List all active and recent tasks with their status.",
             inputSchema={"type": "object", "properties": {}},
         ),
+        Tool(
+            name="readme",
+            description="Get full usage instructions for all agent-injector tools. Call this first to learn how to use sub-agents properly.",
+            inputSchema={"type": "object", "properties": {}},
+        ),
     ]
 
 
@@ -467,7 +543,12 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
 
 async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
-    if name == "llm_run":
+    logger.debug(f"Tool call: {name} args={json.dumps(arguments)[:300]}")
+
+    if name == "readme":
+        return [TextContent(type="text", text=USAGE_INSTRUCTIONS)]
+
+    elif name == "llm_run":
         if _active_count() >= MAX_CONCURRENT:
             return [TextContent(type="text", text=json.dumps({"error": "Too many concurrent tasks", "active": _active_count(), "max": MAX_CONCURRENT}))]
 
@@ -538,6 +619,7 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
         if task["status"] == "running" and proc is not None:
             await _graceful_kill(proc)
             task["status"] = "cancelled"
+            logger.info(f"Task {task['id']} cancelled by user after {task['activity']['turns']} turns")
             try:
                 task["completed_at"] = _now()
             except RuntimeError:
@@ -593,6 +675,7 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
 
 async def main_async():
     _load_dotenv()
+    _setup_file_logging()
 
     global MINIMAX_BASE_URL, MINIMAX_API_KEY, MINIMAX_MODEL
     MINIMAX_BASE_URL = os.environ.get("MINIMAX_BASE_URL", MINIMAX_BASE_URL)
@@ -603,6 +686,7 @@ async def main_async():
         logger.warning("MINIMAX_API_KEY is not set. Tasks will fail without an API key.")
 
     logger.info(f"Agent Injector starting — model={MINIMAX_MODEL} base_url={MINIMAX_BASE_URL}")
+    logger.info(f"Logs: {LOG_DIR}, retention: {LOG_RETENTION_DAYS} days")
 
     cleanup_task = asyncio.create_task(_cleanup_loop())
 

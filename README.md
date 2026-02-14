@@ -76,32 +76,9 @@ Add to your Claude Desktop config:
 | `MINIMAX_BASE_URL` | No | `https://api.minimax.io/anthropic` | Anthropic-compatible endpoint |
 | `MINIMAX_MODEL` | No | `MiniMax-M2.5` | Default model name |
 
-## Usage Instructions for Claude (you can put that into rules file for project, or just hope the llm discovers how use the mcp itself)
+## Usage Instructions for Claude
 
-After installing the MCP server, add the following to your **Project Instructions** (Claude Desktop) or **system prompt** so that Claude knows how to use agent-injector correctly:
-
-```
-You have access to the "agent-injector" MCP tools (llm_run, llm_start, llm_poll, llm_result, llm_cancel, llm_batch_start, llm_batch_poll, llm_list_tasks). These tools spawn Claude Code sub-agents powered by MiniMax M2.5.
-
-Rules:
-- NEVER pass working_directory. Omit it entirely.
-- Sub-agents do NOT have access to your MCP servers, browser, or Notion.
-- ALWAYS pass the "context" parameter with a summary of relevant information the sub-agent needs. The sub-agent has NO access to this conversation — you must generate context yourself.
-
-Context parameter:
-- Every call to llm_run, llm_start, or llm_batch_start accepts an optional "context" string.
-- Use it to pass background info, file contents, constraints, prior decisions — anything the sub-agent needs to do its job.
-- The context is injected into the sub-agent's prompt inside <context> tags before the task itself.
-- Keep context concise but sufficient. Summarize — don't dump entire conversations.
-- Example: if the user asks to refactor a file, read the file yourself first, then pass its contents (or a summary) as context along with the refactoring instructions as the prompt.
-
-Tool selection:
-- llm_run — quick tasks under ~2 minutes, blocks until done
-- llm_start → llm_poll → llm_result — longer tasks (start, poll every 10-15s, fetch result when done)
-- llm_batch_start → llm_batch_poll — multiple independent tasks in parallel
-
-Default allowed tools: Read, Glob, Grep, Bash, Edit, Write. Override with allowed_tools parameter. For web research pass: ["web_search", "web_fetch"].
-```
+"Call the agent-injector:readme tool to get full usage instructions"
 
 ## Supported Providers
 
