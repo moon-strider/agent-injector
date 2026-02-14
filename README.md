@@ -1,8 +1,8 @@
 # Agent Injector
 
-MCP server that spawns [Claude Code](https://claude.com/claude-code) sub-agents powered by alternative Anthropic-compatible models — **MiniMax**, **GLM**, and any other provider that implements the Anthropic Messages API.
+MCP server that spawns [Claude Code](https://claude.com/claude-code) sub-agents powered by alternative Anthropic-compatible models — **MiniMax**, **GLM**, **Moonshot**, and any other provider that implements the Anthropic Messages API.
 
-Instead of using Haiku/Sonnet as sub-agents, delegate tasks to models like MiniMax M2.5 or GLM-5 that offer competitive quality at lower cost, while retaining Claude Code's full agentic toolset (Bash, file I/O, MCP servers, skills).
+Instead of using Haiku/Sonnet as sub-agents, delegate tasks to models like MiniMax M2.5 that offer competitive quality (to Opus) at lower cost, while retaining Claude Code's full agentic toolset (Bash, file I/O, MCP servers, skills).
 
 ## How It Works
 
@@ -22,7 +22,7 @@ Claude Code (headless)  →  MiniMax / GLM / Moonshot
 Full agentic loop: Bash, Read, Edit, Write, Glob, Grep, MCP servers...
 ```
 
-Both MiniMax and GLM expose **native Anthropic-compatible endpoints** — no gateway or translation layer needed. Agent Injector simply sets `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` to point Claude Code at the alternative provider.
+MiniMax, GLM and Moonshot.ai (Kimi models) expose **native Anthropic-compatible endpoints** — no gateway or translation layer needed. Agent Injector simply sets `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` to point Claude Code at the alternative provider.
 
 ## Tools
 
@@ -41,24 +41,59 @@ Both MiniMax and GLM expose **native Anthropic-compatible endpoints** — no gat
 
 Requires Python 3.10+, [uv](https://github.com/astral-sh/uv), and [Claude Code](https://claude.com/claude-code) CLI installed.
 
-### As a Plugin (Claude Desktop / Cowork) — Recommended
+### Claude Desktop
 
-The project is packaged as a Claude Desktop plugin that bundles the MCP server and a skill teaching Claude the correct usage patterns.
+Add to your Claude Desktop config:
 
-1. Clone the repo: `git clone https://github.com/moon-strider/agent-injector.git`
-2. Open `.mcp.json` in the project root and replace the placeholder values with your actual credentials:
-   - `${MINIMAX_API_KEY}` → your MiniMax API key
-   - `${MINIMAX_MODEL}` → model name (e.g. `MiniMax-M2.5`)
-   - `${MINIMAX_BASE_URL}` → endpoint URL (e.g. `https://api.minimax.io/anthropic`)
-3. Zip the project folder into a `.zip` file
-4. In Claude Desktop, go to the **Cowork** tab → upload `agent-injector.zip` manually
-5. The plugin registers both the MCP server and the usage skill automatically
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
-### Claude Code
+```json
+{
+  "mcpServers": {
+    "agent-injector": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/moon-strider/agent-injector",
+        "agent-injector"
+      ],
+      "env": {
+        "MINIMAX_API_KEY": "your-minimax-api-key",
+        "MINIMAX_MODEL": "MiniMax-M2.5",
+        "MINIMAX_BASE_URL": "https://api.minimax.io/anthropic"
+      }
+    }
+  }
+}
+```
 
-```bash
-claude mcp add agent-injector \
-  -- uvx --from git+https://github.com/moon-strider/agent-injector agent-injector
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `MINIMAX_API_KEY` | Yes | — | Your MiniMax API key |
+| `MINIMAX_BASE_URL` | No | `https://api.minimax.io/anthropic` | Anthropic-compatible endpoint |
+| `MINIMAX_MODEL` | No | `MiniMax-M2.5` | Default model name |
+
+## Usage Instructions for Claude (you can put that into rules file for project, or just hope the llm discovers how use the mcp itself)
+
+After installing the MCP server, add the following to your **Project Instructions** (Claude Desktop) or **system prompt** so that Claude knows how to use agent-injector correctly:
+
+```
+You have access to the "agent-injector" MCP tools (llm_run, llm_start, llm_poll, llm_result, llm_cancel, llm_batch_start, llm_batch_poll, llm_list_tasks). These tools spawn Claude Code sub-agents powered by MiniMax M2.5.
+
+Rules:
+- NEVER pass working_directory. Omit it entirely.
+- Prompts must be self-contained — the sub-agent has no access to this conversation. Include all context, file paths, and constraints directly in the prompt.
+- Sub-agents do NOT have access to your MCP servers, browser, or Notion.
+
+Tool selection:
+- llm_run — quick tasks under ~2 minutes, blocks until done
+- llm_start → llm_poll → llm_result — longer tasks (start, poll every 10-15s, fetch result when done)
+- llm_batch_start → llm_batch_poll — multiple independent tasks in parallel
+
+Default allowed tools: Read, Glob, Grep, Bash, Edit, Write. Override with allowed_tools parameter. For web research pass: ["web_search", "web_fetch"].
 ```
 
 ## Supported Providers
@@ -68,13 +103,6 @@ Any provider with an Anthropic Messages API compatible endpoint works. Tested:
 | Provider | Base URL | Models |
 |----------|----------|--------|
 | MiniMax | `https://api.minimax.io/anthropic` | `MiniMax-M2.5`, `MiniMax-M2.5-highspeed` |
-
-## Plugin Components
-
-| Component | Description |
-|-----------|-------------|
-| MCP Server | `agent-injector` — spawns Claude Code sub-agents via `claude -p` |
-| Skill | `agent-injector` — teaches Claude the correct usage patterns, tool selection, prompt writing |
 
 ## Architecture
 
