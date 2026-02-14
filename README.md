@@ -108,6 +108,13 @@ Any provider with an Anthropic Messages API compatible endpoint works. Tested:
 
 Each provider's web search MCP is automatically configured for sub-agents when the provider's API key is set.
 
+> **Important: subscription plans required.** Both MiniMax and Z.AI Anthropic-compatible endpoints are only available through their respective subscription plans — they do not work with pay-as-you-go API credits. Specifically:
+>
+> - **MiniMax** — requires an active MiniMax subscription. The Anthropic-compatible endpoint (`api.minimax.io/anthropic`) is not available with standard API credits.
+> - **Z.AI (GLM)** — requires a GLM Coding Plan subscription (Lite, Pro, or Max). The Anthropic-compatible endpoint (`api.z.ai/api/anthropic`) does not accept regular API credit keys.
+>
+> If you use a regular API key without an active subscription, requests to the Anthropic-compatible endpoints will hang indefinitely instead of returning an error.
+
 ## Architecture
 
 Agent Injector spawns Claude Code in headless mode (`claude -p`) with environment variables that redirect all model tiers (opus, sonnet, haiku) to the configured provider:
