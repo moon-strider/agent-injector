@@ -1,0 +1,9 @@
+{
+  "name": "agent-injector",
+  "version": "0.1.0",
+  "description": "Spawn Claude Code sub-agents powered by MiniMax, GLM, or other Anthropic-compatible models. Run tasks synchronously, asynchronously, or in parallel batches.",
+  "author": {
+    "name": "moon-strider"
+  },
+  "keywords": ["mcp", "claude-code", "minimax", "glm", "agent", "sub-agent", "parallel"]
+}

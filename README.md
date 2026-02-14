@@ -2,7 +2,7 @@
 
 MCP server that spawns [Claude Code](https://claude.com/claude-code) sub-agents powered by alternative Anthropic-compatible models — **MiniMax**, **GLM**, and any other provider that implements the Anthropic Messages API.
 
-Instead of using Haiku/Sonnet as sub-agents, delegate tasks to models like MiniMax M2.5 or GLM-5 that offer competitive quality to Opus at lower cost, while retaining Claude Code's full agentic toolset (Bash, file I/O, MCP servers, skills).
+Instead of using Haiku/Sonnet as sub-agents, delegate tasks to models like MiniMax M2.5 or GLM-5 that offer competitive quality at lower cost, while retaining Claude Code's full agentic toolset (Bash, file I/O, MCP servers, skills).
 
 ## How It Works
 
@@ -15,7 +15,7 @@ Agent Injector (this MCP server)
     │
     │  spawns claude -p ... with swapped env vars
     ▼
-Claude Code (headless)  →  MiniMax / GLM API
+Claude Code (headless)  →  MiniMax / GLM / Moonshot
     │                        (Anthropic-compatible endpoint)
     │
     ▼
@@ -39,34 +39,20 @@ Both MiniMax and GLM expose **native Anthropic-compatible endpoints** — no gat
 
 ## Installation
 
-Requires Python 3.11+, [uv](https://github.com/astral-sh/uv), and [Claude Code](https://claude.com/claude-code) CLI installed.
+Requires Python 3.10+, [uv](https://github.com/astral-sh/uv), and [Claude Code](https://claude.com/claude-code) CLI installed.
 
-### Claude Desktop
+### As a Plugin (Claude Desktop / Cowork) — Recommended
 
-Add to your Claude Desktop config:
+The project is packaged as a Claude Desktop plugin that bundles the MCP server and a skill teaching Claude the correct usage patterns.
 
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "agent-injector": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/moon-strider/agent-injector",
-        "agent-injector"
-      ],
-      "env": {
-        "MINIMAX_API_KEY": "your-minimax-api-key",
-        "MINIMAX_MODEL": "MiniMax-M2.5",
-        "MINIMAX_BASE_URL": "https://api.minimax.io/anthropic"
-      }
-    }
-  }
-}
-```
+1. Clone the repo: `git clone https://github.com/moon-strider/agent-injector.git`
+2. Open `.mcp.json` in the project root and replace the placeholder values with your actual credentials:
+   - `${MINIMAX_API_KEY}` → your MiniMax API key
+   - `${MINIMAX_MODEL}` → model name (e.g. `MiniMax-M2.5`)
+   - `${MINIMAX_BASE_URL}` → endpoint URL (e.g. `https://api.minimax.io/anthropic`)
+3. Zip the project folder into a `.zip` file
+4. In Claude Desktop, go to the **Cowork** tab → upload `agent-injector.zip` manually
+5. The plugin registers both the MCP server and the usage skill automatically
 
 ### Claude Code
 
@@ -75,31 +61,6 @@ claude mcp add agent-injector \
   -- uvx --from git+https://github.com/moon-strider/agent-injector agent-injector
 ```
 
-### From Source
-
-```bash
-git clone https://github.com/moon-strider/agent-injector.git
-cd agent-injector
-uv run agent-injector
-```
-
-### Docker
-
-```bash
-docker build -t agent-injector .
-docker run -e MINIMAX_API_KEY=your-key agent-injector
-```
-
-## Environment Variables
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `MINIMAX_API_KEY` | Yes | — | Your MiniMax API key |
-| `MINIMAX_BASE_URL` | No | `https://api.minimax.io/anthropic` | Anthropic-compatible endpoint |
-| `MINIMAX_MODEL` | No | `MiniMax-M2.5` | Default model name |
-
-A `.env` file in the project root is also supported.
-
 ## Supported Providers
 
 Any provider with an Anthropic Messages API compatible endpoint works. Tested:
@@ -107,7 +68,13 @@ Any provider with an Anthropic Messages API compatible endpoint works. Tested:
 | Provider | Base URL | Models |
 |----------|----------|--------|
 | MiniMax | `https://api.minimax.io/anthropic` | `MiniMax-M2.5`, `MiniMax-M2.5-highspeed` |
-| GLM (Zhipu AI) | `https://api.z.ai/api/anthropic` | `glm-5` |
+
+## Plugin Components
+
+| Component | Description |
+|-----------|-------------|
+| MCP Server | `agent-injector` — spawns Claude Code sub-agents via `claude -p` |
+| Skill | `agent-injector` — teaches Claude the correct usage patterns, tool selection, prompt writing |
 
 ## Architecture
 
@@ -122,12 +89,10 @@ ANTHROPIC_DEFAULT_HAIKU_MODEL=MiniMax-M2.5
 DISABLE_PROMPT_CACHING=1
 ```
 
-The spawned Claude Code instance has full access to its standard toolset plus any MCP servers and skills configured in the working directory.
-
 Built-in safeguards:
 
 - **Process timeouts** — configurable per task (default 300s), SIGTERM → SIGKILL escalation
-- **Concurrency limits** — max 5 simultaneous tasks
+- **Concurrency limits** — max 10 simultaneous tasks
 - **Automatic cleanup** — dead tasks garbage-collected every 30s, results expire after 10 min
 - **Graceful shutdown** — all child processes terminated on server exit
 

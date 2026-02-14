@@ -8,9 +8,9 @@
         "agent-injector"
       ],
       "env": {
-        "MINIMAX_API_KEY": "your-minimax-api-key",
-        "MINIMAX_MODEL": "MiniMax-M2.5",
-        "MINIMAX_BASE_URL": "https://api.minimax.io/anthropic"
+        "MINIMAX_API_KEY": "${MINIMAX_API_KEY}",
+        "MINIMAX_MODEL": "${MINIMAX_MODEL}",
+        "MINIMAX_BASE_URL": "${MINIMAX_BASE_URL}"
       }
     }
   }
