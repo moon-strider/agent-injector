@@ -6,6 +6,7 @@ import os
 import sys
 import time
 import uuid
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -44,9 +45,19 @@ def _rotate_logs():
         except OSError:
             pass
 
-MINIMAX_BASE_URL = os.environ.get("MINIMAX_BASE_URL", "https://api.minimax.io/anthropic")
-MINIMAX_API_KEY = os.environ.get("MINIMAX_API_KEY", "")
-MINIMAX_MODEL = os.environ.get("MINIMAX_MODEL", "MiniMax-M2.5")
+
+@dataclass
+class Provider:
+    name: str
+    api_key: str
+    base_url: str
+    default_model: str
+    mcp_servers: dict = field(default_factory=dict)
+    known_models: list[str] = field(default_factory=list)
+
+
+PROVIDERS: dict[str, Provider] = {}
+DEFAULT_MODEL: str | None = None
 
 DEFAULT_TIMEOUT = 1200
 DEFAULT_MAX_TURNS = 150
@@ -77,11 +88,104 @@ def _load_dotenv():
             os.environ[key] = value
 
 
-def _build_env(model: str) -> dict[str, str]:
+def _build_minimax_mcp(api_key: str, base_url: str) -> dict:
+    api_host = base_url.replace("/anthropic", "") if base_url.endswith("/anthropic") else base_url
+    return {
+        "minimax-search": {
+            "command": "uvx",
+            "args": ["minimax-coding-plan-mcp", "-y"],
+            "env": {
+                "MINIMAX_API_KEY": api_key,
+                "MINIMAX_API_HOST": api_host,
+            },
+        }
+    }
+
+
+def _build_zai_mcp(api_key: str, base_url: str) -> dict:
+    return {
+        "zai-search": {
+            "type": "http",
+            "url": "https://api.z.ai/api/mcp/web_search_prime/mcp",
+            "headers": {
+                "Authorization": f"Bearer {api_key}",
+            },
+        }
+    }
+
+
+PROVIDER_DEFAULTS = {
+    "minimax": {
+        "key_var": "MINIMAX_API_KEY",
+        "url_var": "MINIMAX_BASE_URL",
+        "model_var": "MINIMAX_MODEL",
+        "default_url": "https://api.minimax.io/anthropic",
+        "default_model": "MiniMax-M2.5",
+        "known_models": ["MiniMax-M2.5", "MiniMax-M2.5-highspeed"],
+        "mcp_builder": _build_minimax_mcp,
+    },
+    "zai": {
+        "key_var": "ZAI_API_KEY",
+        "url_var": "ZAI_BASE_URL",
+        "model_var": "ZAI_MODEL",
+        "default_url": "https://api.z.ai/api/anthropic",
+        "default_model": "glm-5",
+        "known_models": ["glm-5", "glm-4.7", "glm-4.6", "glm-4.5-air"],
+        "mcp_builder": _build_zai_mcp,
+    },
+}
+
+
+def _init_providers():
+    global DEFAULT_MODEL
+    for name, cfg in PROVIDER_DEFAULTS.items():
+        api_key = os.environ.get(cfg["key_var"], "")
+        if not api_key:
+            continue
+        base_url = os.environ.get(cfg["url_var"], cfg["default_url"])
+        model = os.environ.get(cfg["model_var"], cfg["default_model"])
+        mcp_servers = cfg["mcp_builder"](api_key, base_url)
+        PROVIDERS[name] = Provider(
+            name=name,
+            api_key=api_key,
+            base_url=base_url,
+            default_model=model,
+            mcp_servers=mcp_servers,
+            known_models=cfg["known_models"],
+        )
+        logger.info(f"Provider '{name}' registered: model={model} base_url={base_url}")
+
+    DEFAULT_MODEL = os.environ.get("DEFAULT_MODEL")
+    if DEFAULT_MODEL:
+        logger.info(f"DEFAULT_MODEL={DEFAULT_MODEL}")
+
+    if not PROVIDERS:
+        logger.warning("No provider API keys set. Tasks will fail.")
+
+
+def _resolve_provider(model: str | None = None) -> tuple[Provider, str]:
+    if not PROVIDERS:
+        raise RuntimeError("No providers configured. Set at least one API key (MINIMAX_API_KEY or ZAI_API_KEY).")
+
+    target_model = model or DEFAULT_MODEL
+
+    if target_model:
+        for provider in PROVIDERS.values():
+            if target_model == provider.default_model or target_model in provider.known_models:
+                return provider, target_model
+        first = next(iter(PROVIDERS.values()))
+        logger.debug(f"Model '{target_model}' not recognized, routing to provider '{first.name}'")
+        return first, target_model
+
+    first = next(iter(PROVIDERS.values()))
+    return first, first.default_model
+
+
+def _build_env(provider: Provider, model: str) -> dict[str, str]:
     env = dict(os.environ)
-    env["ANTHROPIC_BASE_URL"] = MINIMAX_BASE_URL
-    env["ANTHROPIC_API_KEY"] = MINIMAX_API_KEY
-    env["ANTHROPIC_AUTH_TOKEN"] = MINIMAX_API_KEY
+    env["ANTHROPIC_BASE_URL"] = provider.base_url
+    env["ANTHROPIC_API_KEY"] = provider.api_key
+    env["ANTHROPIC_AUTH_TOKEN"] = provider.api_key
     env["ANTHROPIC_MODEL"] = model
     env["ANTHROPIC_DEFAULT_OPUS_MODEL"] = model
     env["ANTHROPIC_DEFAULT_SONNET_MODEL"] = model
@@ -90,20 +194,10 @@ def _build_env(model: str) -> dict[str, str]:
     return env
 
 
-def _build_mcp_config() -> str:
-    api_host = MINIMAX_BASE_URL.replace("/anthropic", "") if MINIMAX_BASE_URL.endswith("/anthropic") else MINIMAX_BASE_URL
-    return json.dumps({
-        "mcpServers": {
-            "minimax-search": {
-                "command": "uvx",
-                "args": ["minimax-coding-plan-mcp", "-y"],
-                "env": {
-                    "MINIMAX_API_KEY": MINIMAX_API_KEY,
-                    "MINIMAX_API_HOST": api_host,
-                },
-            }
-        }
-    })
+def _build_mcp_config(provider: Provider) -> str | None:
+    if not provider.mcp_servers:
+        return None
+    return json.dumps({"mcpServers": provider.mcp_servers})
 
 
 def _active_count() -> int:
@@ -141,7 +235,7 @@ async def _spawn_task(
     max_turns: int = DEFAULT_MAX_TURNS,
 ) -> str:
     task_id = uuid.uuid4().hex[:8]
-    model = model or MINIMAX_MODEL
+    provider, resolved_model = _resolve_provider(model)
     tools = allowed_tools if allowed_tools else ["Read", "Glob", "Grep", "Bash", "Edit", "Write"]
 
     cwd = working_directory or Path.home().as_posix()
@@ -159,13 +253,16 @@ async def _spawn_task(
         "--max-turns", str(max_turns),
         "--dangerously-skip-permissions",
         "--disallowedTools", "",
-        "--mcp-config", _build_mcp_config(),
     ]
+
+    mcp_config = _build_mcp_config(provider)
+    if mcp_config:
+        args.extend(["--mcp-config", mcp_config])
 
     if tools:
         args.extend(["--allowedTools", ",".join(tools)])
 
-    env = _build_env(model)
+    env = _build_env(provider, resolved_model)
 
     proc = await asyncio.create_subprocess_exec(
         *args,
@@ -176,13 +273,14 @@ async def _spawn_task(
         env=env,
     )
 
-    logger.info(f"Task {task_id} spawned: model={model} cwd={cwd} max_turns={max_turns} timeout={timeout_seconds}s")
+    logger.info(f"Task {task_id} spawned: provider={provider.name} model={resolved_model} cwd={cwd} max_turns={max_turns} timeout={timeout_seconds}s")
     logger.debug(f"Task {task_id} prompt: {prompt[:200]}")
 
     task = {
         "id": task_id,
         "status": "running",
-        "model": model,
+        "model": resolved_model,
+        "provider": provider.name,
         "prompt": prompt,
         "output": "",
         "stderr_output": "",
@@ -289,7 +387,7 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
 
         task["exit_code"] = proc.returncode
         task["status"] = "completed" if proc.returncode == 0 else "failed"
-        logger.info(f"Task {task['id']} {task['status']} exit_code={proc.returncode} turns={task['activity']['turns']}")
+        logger.info(f"Task {task['id']} {task['status']} provider={task['provider']} exit_code={proc.returncode} turns={task['activity']['turns']}")
         if task["status"] == "failed" and task["stderr_output"]:
             logger.error(f"Task {task['id']} stderr: {task['stderr_output'][-500:]}")
 
@@ -317,7 +415,30 @@ async def _read_stream(task: dict, proc: asyncio.subprocess.Process, timeout: in
         task["process"] = None
 
 
-USAGE_INSTRUCTIONS = """You have access to the "agent-injector" MCP tools. These tools spawn Claude Code sub-agents powered by MiniMax M2.5.
+def _get_default_model_description() -> str:
+    if DEFAULT_MODEL:
+        return DEFAULT_MODEL
+    if PROVIDERS:
+        first = next(iter(PROVIDERS.values()))
+        return first.default_model
+    return "auto"
+
+
+def _build_usage_instructions() -> str:
+    providers_info = []
+    for p in PROVIDERS.values():
+        search_info = "web search MCP available" if p.mcp_servers else "no web search MCP"
+        providers_info.append(f"  - {p.name}: model={p.default_model}, {search_info}")
+    providers_block = "\n".join(providers_info) if providers_info else "  (none configured)"
+
+    default_model = _get_default_model_description()
+
+    return f"""You have access to the "agent-injector" MCP tools. These tools spawn Claude Code sub-agents powered by alternative model backends.
+
+Active providers:
+{providers_block}
+
+Default model: {default_model}
 
 Available tools:
 - llm_run — Run a task synchronously (blocks until done). Best for quick tasks under ~2 min.
@@ -341,6 +462,10 @@ Context parameter:
 - Keep context concise but sufficient. Summarize — don't dump entire conversations.
 - Example: if the user asks to refactor a file, read the file yourself first, then pass its contents (or a summary) as context along with the refactoring instructions as the prompt.
 
+Model parameter:
+- Pass "model" to override the default model. The provider is auto-detected from the model name.
+- Available models depend on which provider API keys are configured.
+
 Tool selection:
 - llm_run — quick tasks under ~2 minutes, blocks until done
 - llm_start → llm_poll → llm_result — longer tasks (start, poll every 10-15s, fetch result when done)
@@ -351,7 +476,7 @@ Polling:
 - Use this to monitor progress without waiting for completion.
 
 Default allowed tools for sub-agents: Read, Glob, Grep, Bash, Edit, Write. Override with allowed_tools parameter.
-Sub-agents also have access to MiniMax web_search and understand_image MCP tools by default."""
+Sub-agents also have access to provider-specific web search MCP tools by default (when available for the selected provider)."""
 
 
 def _extract_result(raw: str) -> str:
@@ -377,6 +502,7 @@ def _task_summary(task: dict) -> dict:
         "task_id": task["id"],
         "status": task["status"],
         "model": task["model"],
+        "provider": task.get("provider", "unknown"),
         "elapsed_seconds": round(now - task["started_at"]),
         "exit_code": task["exit_code"],
     }
@@ -402,11 +528,12 @@ async def _cleanup_loop():
 
 @server.list_tools()
 async def list_tools() -> list[Tool]:
+    default_model = _get_default_model_description()
     return [
         Tool(
             name="llm_run",
             description=(
-                "Run a task using Claude Code with MiniMax as the backend model. "
+                "Run a task using Claude Code with an alternative model backend. "
                 "Blocks until completion or timeout. Use for tasks under ~2 minutes."
             ),
             inputSchema={
@@ -414,7 +541,7 @@ async def list_tools() -> list[Tool]:
                 "properties": {
                     "prompt": {"type": "string", "description": "Task description for the agent"},
                     "context": {"type": "string", "description": "Task context generated by the calling agent — background info, relevant data, constraints. Passed to the sub-agent inside <context> tags."},
-                    "model": {"type": "string", "description": f"Model name (default: {MINIMAX_MODEL})"},
+                    "model": {"type": "string", "description": f"Model name (default: {default_model})"},
                     "working_directory": {"type": "string", "description": "Working directory"},
                     "allowed_tools": {
                         "type": "array", "items": {"type": "string"},
@@ -429,7 +556,7 @@ async def list_tools() -> list[Tool]:
         Tool(
             name="llm_start",
             description=(
-                "Start a background task using Claude Code with MiniMax. "
+                "Start a background task using Claude Code with an alternative model backend. "
                 "Returns a task_id for polling. Use for tasks that may take longer than 2 minutes."
             ),
             inputSchema={
@@ -437,7 +564,7 @@ async def list_tools() -> list[Tool]:
                 "properties": {
                     "prompt": {"type": "string", "description": "Task description for the agent"},
                     "context": {"type": "string", "description": "Task context generated by the calling agent — background info, relevant data, constraints. Passed to the sub-agent inside <context> tags."},
-                    "model": {"type": "string", "description": f"Model name (default: {MINIMAX_MODEL})"},
+                    "model": {"type": "string", "description": f"Model name (default: {default_model})"},
                     "working_directory": {"type": "string", "description": "Working directory"},
                     "allowed_tools": {
                         "type": "array", "items": {"type": "string"},
@@ -546,7 +673,7 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
     logger.debug(f"Tool call: {name} args={json.dumps(arguments)[:300]}")
 
     if name == "readme":
-        return [TextContent(type="text", text=USAGE_INSTRUCTIONS)]
+        return [TextContent(type="text", text=_build_usage_instructions())]
 
     elif name == "llm_run":
         if _active_count() >= MAX_CONCURRENT:
@@ -587,7 +714,8 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
             max_turns=arguments.get("max_turns", DEFAULT_MAX_TURNS),
         )
 
-        return [TextContent(type="text", text=json.dumps({"task_id": task_id, "status": "running", "model": tasks[task_id]["model"]}))]
+        task = tasks[task_id]
+        return [TextContent(type="text", text=json.dumps({"task_id": task_id, "status": "running", "model": task["model"], "provider": task["provider"]}))]
 
     elif name == "llm_poll":
         task = tasks.get(arguments["task_id"])
@@ -676,16 +804,13 @@ async def _handle_tool(name: str, arguments: dict[str, Any]) -> list[TextContent
 async def main_async():
     _load_dotenv()
     _setup_file_logging()
+    _init_providers()
 
-    global MINIMAX_BASE_URL, MINIMAX_API_KEY, MINIMAX_MODEL
-    MINIMAX_BASE_URL = os.environ.get("MINIMAX_BASE_URL", MINIMAX_BASE_URL)
-    MINIMAX_API_KEY = os.environ.get("MINIMAX_API_KEY", MINIMAX_API_KEY)
-    MINIMAX_MODEL = os.environ.get("MINIMAX_MODEL", MINIMAX_MODEL)
-
-    if not MINIMAX_API_KEY:
-        logger.warning("MINIMAX_API_KEY is not set. Tasks will fail without an API key.")
-
-    logger.info(f"Agent Injector starting — model={MINIMAX_MODEL} base_url={MINIMAX_BASE_URL}")
+    if PROVIDERS:
+        names = ", ".join(f"{p.name}({p.default_model})" for p in PROVIDERS.values())
+        logger.info(f"Agent Injector starting — providers: {names}")
+    else:
+        logger.info("Agent Injector starting — no providers configured")
     logger.info(f"Logs: {LOG_DIR}, retention: {LOG_RETENTION_DAYS} days")
 
     cleanup_task = asyncio.create_task(_cleanup_loop())
