@@ -14,7 +14,7 @@ requires-python = ">=3.11"
 license = "MIT"
 keywords = ["mcp", "claude", "claude-code", "minimax", "glm", "agent", "anthropic"]
 dependencies = [
-    "mcp>=1.30,<2",
+    "mcp>=1.30,<3",
     "pydantic>=2.12,<3",
 ]
 
