@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim AS claude
+FROM node:26-bookworm-slim AS claude
 ARG CLAUDE_CODE_VERSION=2.1.266
 RUN npm install --prefix /opt/claude --no-audit --no-fund \
     @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
