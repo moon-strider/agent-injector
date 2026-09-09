@@ -6,15 +6,7 @@
         "--from",
         "git+https://github.com/moon-strider/agent-injector",
         "agent-injector"
-      ],
-      "env": {
-        "MINIMAX_API_KEY": "${MINIMAX_API_KEY}",
-        "MINIMAX_MODEL": "MiniMax-M2.5",
-        "MINIMAX_BASE_URL": "https://api.minimax.io/anthropic",
-        "ZAI_API_KEY": "${ZAI_API_KEY}",
-        "ZAI_BASE_URL": "https://api.z.ai/api/anthropic",
-        "ZAI_MODEL": "glm-5"
-      }
+      ]
     }
   }
 }
