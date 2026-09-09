@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
@@ -8,13 +8,25 @@ dynamic = ["version"]
 authors = [
     { name = "moon-strider" },
 ]
-description = "MCP server that spawns Claude Code sub-agents powered by alternative Anthropic-compatible models (MiniMax, GLM etc)"
+description = "Run bounded Claude Code tasks through MCP with local or hosted model backends"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "MIT"
 keywords = ["mcp", "claude", "claude-code", "minimax", "glm", "agent", "anthropic"]
 dependencies = [
-    "mcp>=1.0.2",
+    "mcp>=1.30,<2",
+    "pydantic>=2.12,<3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3,<10",
+    "pytest-asyncio>=1.3,<2",
+    "pytest-cov>=7,<8",
+    "ruff>=0.15,<1",
+    "mypy>=1.19,<3",
+    "build>=1.4,<2",
+    "pip-audit>=2.10,<3",
 ]
 
 [project.scripts]
@@ -23,8 +35,33 @@ agent-injector = "agent_injector:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/agent_injector"]
 
-[tool.hatch.metadata]
-allow-direct-references = true
-
 [tool.hatch.version]
 path = "src/agent_injector/__init__.py"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = ["integration: real Claude Code or model integration (opt in)"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ASYNC110", "ASYNC240"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.coverage.run]
+source = ["agent_injector"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 85
