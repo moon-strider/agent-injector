@@ -25,7 +25,7 @@ USAGE = """Agent Injector runs bounded Claude Code tasks through configured mode
 3. provider explicitly selects a configured backend. Unknown model names require provider.
 4. allowed_tools defaults to Read, Glob, Grep, intersected with server policy. [] disables
    tools. Bash, Edit and Write must be explicitly requested and permitted by the server.
-5. required_tools can require observed tool calls before a task can complete successfully.
+5. required_tools requires tool calls with successful tool results before completion.
    Text resembling a tool call does not count. This does not verify the semantic result.
 6. working_directory must be inside AGENT_WORKING_ROOT. This is an admission check,
    not an operating-system sandbox. Authorized tools retain local account privileges.
@@ -33,7 +33,7 @@ USAGE = """Agent Injector runs bounded Claude Code tasks through configured mode
    when a process slot becomes available; timeout_seconds includes queue time.
 8. Cancel queued/running tasks with llm_cancel. Results expire and may be evicted when
    retained capacity is reached. llm_list_tasks supports status/offset/limit.
-9. completed means the CLI returned a successful result and required tools were observed.
+9. completed means the CLI returned a successful result and required tools returned successfully.
    Inspect result, tool_calls and tool_error_count; validate your task's actual output.
 
 No provider search MCP servers, other local MCP configurations, skills or permission

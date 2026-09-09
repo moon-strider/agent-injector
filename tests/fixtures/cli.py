@@ -42,7 +42,7 @@ elif prompt == "malformed":
         {"type": "assistant", "message": {"content": 123}},
     ]:
         emit(value)
-elif prompt == "tool":
+elif prompt in {"tool", "failed-tool"}:
     value = {
         "type": "assistant",
         "message": {
@@ -61,6 +61,21 @@ elif prompt == "tool":
     emit(value)
     emit(value)
     emit({"type": "user", "message": {"content": [{"type": "tool_result", "is_error": True}]}})
+    if prompt == "tool":
+        emit(
+            {
+                "type": "user",
+                "message": {
+                    "content": [
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": "tool-one",
+                            "content": "fixture contents",
+                        }
+                    ]
+                },
+            }
+        )
 elif prompt == "unicode":
     raw = json.dumps(
         {

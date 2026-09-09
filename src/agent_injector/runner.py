@@ -49,6 +49,7 @@ class Job:
     usage: dict[str, int] = field(default_factory=dict)
     tool_calls: list[dict[str, str]] = field(default_factory=list)
     tool_error_count: int = 0
+    successful_tool_ids: set[str] = field(default_factory=set, repr=False)
     turns: int = 0
     assistant_ids: set[str] = field(default_factory=set, repr=False)
     terminal: dict[str, Any] | None = field(default=None, repr=False)
@@ -75,7 +76,7 @@ class Job:
 def command(settings: Settings, job: Job) -> list[str]:
     args = [
         settings.claude_command,
-        "--bare",
+        "--safe-mode",
         "-p",
         "--output-format",
         "stream-json",
@@ -228,6 +229,8 @@ class TaskManager:
 
     async def cancel(self, job: Job) -> None:
         if job.status not in ACTIVE:
+            if job.status == "cancelled" and not job.done.is_set():
+                await job.done.wait()
             return
         job.status = "cancelled"
         if job.worker:
@@ -244,6 +247,10 @@ class TaskManager:
             self._closed = True
         await asyncio.gather(
             *(self.cancel(job) for job in list(self.jobs.values()) if job.status in ACTIVE)
+        )
+        await asyncio.gather(
+            *(job.worker for job in self.jobs.values() if job.worker is not None),
+            return_exceptions=True,
         )
 
     def _clean_batches(self) -> None:
@@ -298,6 +305,14 @@ class TaskManager:
                 elif block.get("type") == "text" and isinstance(block.get("text"), str):
                     job.partial_output = self.redact(block["text"][-2000:])
         elif event.get("type") == "user":
+            for block in content:
+                if (
+                    isinstance(block, dict)
+                    and block.get("type") == "tool_result"
+                    and block.get("is_error") is not True
+                    and isinstance(block.get("tool_use_id"), str)
+                ):
+                    job.successful_tool_ids.add(block["tool_use_id"])
             job.tool_error_count += sum(
                 isinstance(b, dict) and b.get("type") == "tool_result" and b.get("is_error") is True
                 for b in content
@@ -346,9 +361,13 @@ class TaskManager:
             )
         if event.get("permission_denials"):
             raise TaskError("permission_denied", "Claude Code reported denied tool permissions")
-        observed = {entry["name"] for entry in job.tool_calls}
+        observed = {
+            entry["name"] for entry in job.tool_calls if entry["id"] in job.successful_tool_ids
+        }
         if not set(job.request.required_tools) <= observed:
-            raise TaskError("required_tool_missing", "Claude Code did not call all required tools")
+            raise TaskError(
+                "required_tool_missing", "Required tools did not return successful results"
+            )
         usage = event.get("usage", {})
         if isinstance(usage, dict):
             job.usage = {

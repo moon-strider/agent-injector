@@ -41,7 +41,7 @@ async def test_tools_restrict_availability_and_empty_means_none(settings):
         args = json.loads(job.result)
         assert args[args.index("--tools") + 1] == ",".join(tools)
         assert "--dangerously-skip-permissions" not in args
-        assert "--strict-mcp-config" in args and "--bare" in args
+        assert "--strict-mcp-config" in args and "--safe-mode" in args
         assert "argv" not in args  # prompts travel through stdin
     default = manager.prepare(TaskRequest(prompt="test"))
     assert default.tools == ["Read", "Glob", "Grep"]
@@ -70,11 +70,38 @@ async def test_observed_tools_required_and_duplicates(settings):
     manager = TaskManager(settings)
     fake = await finish(manager, "fake-tool", allowed_tools=["Read"], required_tools=["Read"])
     assert fake.status == "failed" and fake.error["code"] == "required_tool_missing"
+    denied = await finish(manager, "failed-tool", allowed_tools=["Read"], required_tools=["Read"])
+    assert denied.status == "failed" and denied.error["code"] == "required_tool_missing"
     real = await finish(manager, "tool", allowed_tools=["Read"], required_tools=["Read"])
     assert real.status == "completed" and real.turns == 1
     assert real.tool_calls == [{"name": "Read", "id": "tool-one"}]
     assert real.tool_error_count == 1
     assert real.partial_output == "reading"
+
+
+async def test_cancellation_during_spawn_acquires_child_ownership(settings, monkeypatch):
+    manager = TaskManager(settings)
+    original = asyncio.create_subprocess_exec
+    spawned = asyncio.Event()
+    release = asyncio.Event()
+    processes = []
+
+    async def delayed_spawn(*args, **kwargs):
+        proc = await original(*args, **kwargs)
+        processes.append(proc)
+        spawned.set()
+        await release.wait()
+        return proc
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", delayed_spawn)
+    job = await manager.start(TaskRequest(prompt="slow"))
+    await asyncio.wait_for(spawned.wait(), 3)
+    cancelling = asyncio.create_task(manager.cancel(job))
+    await asyncio.sleep(0)
+    release.set()
+    await asyncio.wait_for(cancelling, 3)
+    assert job.status == "cancelled" and job.done.is_set()
+    assert processes[0].returncode is not None
 
 
 async def test_incremental_unicode_malformed_events_and_redaction(settings):
