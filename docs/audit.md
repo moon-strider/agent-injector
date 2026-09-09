@@ -53,6 +53,34 @@ failure were also reproduced in the preceding real smoke investigation.
   accompany the runtime tests. CI exercises Python 3.11–3.14, macOS, actual Claude
   Code with the local protocol fixture, and the non-root container.
 
+## Recorded results
+
+The final local suite on Python 3.12.14 passed **73 tests**, including the real
+Claude Code integration, in 9.24 seconds. Combined statement/branch coverage was
+**92.46%**, above the enforced 85% threshold. Without the optional CLI executable,
+72 tests pass and the integration is skipped. Configuration and request models
+had full measured coverage; CLI subprocess entry points are also exercised by
+the stdio and fresh-install checks, outside the parent coverage process.
+
+Ruff lint/format, strict mypy, source/wheel builds and a clean wheel installation
+passed. The dependency audit reported no known advisories in the installed
+environment. Gitleaks 8.30.1 found no secrets in the reviewed source and history;
+these are scanner observations, not proof that a package can have no vulnerability.
+
+The [initial CI run](https://github.com/moon-strider/agent-injector/actions/runs/34341105737)
+passed all eight jobs: quality/dependency checks, Python 3.11–3.14 on Linux,
+Python 3.12 on macOS, actual CLI integration and package/container checks.
+The container built successfully, reported the installed CLI version and ran as
+a non-root account. The [pull request](https://github.com/moon-strider/agent-injector/pull/1)
+also records validation of subsequent documentation/evidence commits.
+
+All four post-fix CPU copy-file experiments failed their unchanged content check.
+Qwen3 1.7B Q8 wrote a placeholder; Qwen2.5 3B Q4 wrote `DONE`, including after a
+more explicit sequential prompt. Actual Read/Write tool results succeeded, which
+demonstrates why runtime completion and task correctness must be checked separately.
+[Model revisions, checksums, timings and reproduction](local-inference.md) and
+[recorded excerpts](validation/cpu-smoke.json) preserve these negative results.
+
 ## Compatibility changes in this release
 
 Python 3.11+ is required. The internal Python modules were reorganized; the

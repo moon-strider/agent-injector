@@ -89,6 +89,26 @@ from greedy to the publisher's non-thinking defaults did not fix that observed
 failure. Do not treat small-model chat success, tool-call presence, or a CLI success
 flag as a model-quality benchmark.
 
-See [the audit](audit.md) for the final validation summary, including subsequent
-model experiments and CI evidence. Cloud provider presets were not exercised with
-paid inference during this audit.
+`Qwen/Qwen2.5-3B-Instruct-GGUF`, file `qwen2.5-3b-instruct-q4_k_m.gguf`, revision
+`7dabda4d13d513e3e842b20f0d435c732f172cbe`, SHA-256
+`626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d`,
+also made successful tool calls but wrote `DONE` into the destination. A second
+run with a more explicit sequential prompt still failed the unchanged content
+assertion. The same Qwen3-oriented sampling settings were used in these two
+experiments; they are not a model comparison or a tuned Qwen2.5 benchmark.
+
+| Model / experiment | Task seconds | Actual destination | Exact-copy check |
+| --- | ---: | --- | --- |
+| Qwen3 1.7B Q8, greedy | 152.354 | `The content of the file.` | failed |
+| Qwen3 1.7B Q8, sampled | 112.440 | `The content of the file.` | failed |
+| Qwen2.5 3B Q4, sampled | 48.769 | `DONE` | failed |
+| Qwen2.5 3B Q4, explicit sequential prompt | 96.517 | `DONE` | failed |
+
+The expected destination was `amber-willow-kite\n` in every case. Timings exclude
+model-server startup and are single observations, not performance benchmarks.
+[Recorded result excerpts](validation/cpu-smoke.json) preserve the observed
+tool IDs, usage, completion flags and output content, including all four failures.
+None of these experiments establishes a dependable small-model coding agent.
+
+See [the audit](audit.md) for the validation summary and CI evidence. Cloud
+provider presets were not exercised with paid inference during this audit.

@@ -1,0 +1,364 @@
+{
+  "date": "2026-09-09",
+  "kind": "selected fields from actual local smoke reports",
+  "llama_cpp": {
+    "release": "b10867",
+    "commit": "f3f1a8f27"
+  },
+  "notes": [
+    "Paths and disposable local credentials omitted; remaining llama arguments retained.",
+    "Single-run observations, excluding model startup; not a benchmark.",
+    "All runs used a short replacement system prompt and a synthetic workspace.",
+    "CLI completion does not establish exact-copy correctness."
+  ],
+  "runs": [
+    {
+      "experiment": "short prompt, greedy",
+      "model_file": "Qwen3-1.7B-Q8_0.gguf",
+      "model_sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a",
+      "claude_version": "2.1.266 (Claude Code)",
+      "llama_arguments": [
+        "--alias",
+        "qwen3-1.7b",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "59549",
+        "-c",
+        "16384",
+        "-t",
+        "4",
+        "-ngl",
+        "0",
+        "-np",
+        "1",
+        "--jinja",
+        "--chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--temp",
+        "0",
+        "--no-webui"
+      ],
+      "elapsed_s": 152.354,
+      "mcp_is_error": false,
+      "status": "completed",
+      "exit_code": 0,
+      "result": "DONE",
+      "tool_calls": [
+        {
+          "name": "Read",
+          "id": "Dq7L2iceoBKZsN8dHeayVHLwpknBuvmA"
+        },
+        {
+          "name": "Write",
+          "id": "GtGvQgUo5hPaZwub4b2wkVq70aYqIhGg"
+        },
+        {
+          "name": "Write",
+          "id": "WS4lcua5gXCmiXD0nwEousf2C4x1qk31"
+        },
+        {
+          "name": "Write",
+          "id": "b9JguN8Aa8cF7J1MrXrpuSfObTEY2J0i"
+        },
+        {
+          "name": "Write",
+          "id": "okgv5h19UaGwNPGDWvYj4NC4qhfDnNuZ"
+        },
+        {
+          "name": "Write",
+          "id": "ayiob7oRTvtBeWLqbARrohftg8IaOLhU"
+        },
+        {
+          "name": "Write",
+          "id": "YpSUZSlCkt1pNrFEeV91OwUQpJdqavBC"
+        },
+        {
+          "name": "Write",
+          "id": "EhogZsCj6YYCOYMm2I0tB0S6OXBGEjLe"
+        },
+        {
+          "name": "Write",
+          "id": "gFVqnR8EGIVXBMQdRfvZWuDBmDHNTjhx"
+        },
+        {
+          "name": "Write",
+          "id": "ML6j9RMxVX01JO8I44ozvTM16623JJzz"
+        },
+        {
+          "name": "Write",
+          "id": "ZI8LJaYQtTA7LBFEdHO8WGk2NLkb3imh"
+        },
+        {
+          "name": "Write",
+          "id": "owZgmrm5bTBCNtFeX5Vl65d7Ie5qq0i4"
+        },
+        {
+          "name": "Write",
+          "id": "Y2QLhrYHpmHxcFRo0gtw0m4v4OgqxEzY"
+        }
+      ],
+      "tool_error_count": 0,
+      "usage": {
+        "input_tokens": 1972,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 956,
+        "output_tokens": 514
+      },
+      "turns": 2,
+      "expected_file_content": "amber-willow-kite\n",
+      "actual_file_content": "The content of the file.",
+      "passed": false
+    },
+    {
+      "experiment": "short prompt, sampled",
+      "model_file": "Qwen3-1.7B-Q8_0.gguf",
+      "model_sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a",
+      "claude_version": "2.1.266 (Claude Code)",
+      "llama_arguments": [
+        "--alias",
+        "qwen3-1.7b",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "41589",
+        "-c",
+        "16384",
+        "-t",
+        "4",
+        "-ngl",
+        "0",
+        "-np",
+        "1",
+        "--jinja",
+        "--chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--temp",
+        "0.7",
+        "--top-p",
+        "0.8",
+        "--top-k",
+        "20",
+        "--min-p",
+        "0",
+        "--seed",
+        "42",
+        "--no-webui"
+      ],
+      "elapsed_s": 112.44,
+      "mcp_is_error": false,
+      "status": "completed",
+      "exit_code": 0,
+      "result": "DONE",
+      "tool_calls": [
+        {
+          "name": "Read",
+          "id": "4OrWz6nb0WmffmYSrYpJeEVskqH2vJ0b"
+        },
+        {
+          "name": "Write",
+          "id": "Xl2gd5DDqM0ubthx52W4Wnbi0mWrHuxg"
+        },
+        {
+          "name": "Write",
+          "id": "txwcCEm5yiyH5axBeUHzcBY51XaeUuQG"
+        },
+        {
+          "name": "Write",
+          "id": "vOdekdZA9nFCUjBg3zv8AdoH6SM6pZL8"
+        },
+        {
+          "name": "Write",
+          "id": "ltKHUqkJXI9jkLVmYvU9I3FpGn7xiYTK"
+        },
+        {
+          "name": "Write",
+          "id": "58MBMKn55xCJSj9a018g2UHDCvO34UYc"
+        },
+        {
+          "name": "Write",
+          "id": "nFMy8cehnV1qpafYJgDgeBYk1lbpQGWl"
+        },
+        {
+          "name": "Write",
+          "id": "vaQiH1HRHCtdPboUPiKHzT8uVbkIB9jj"
+        },
+        {
+          "name": "Write",
+          "id": "k48cT8ZNnxGbyCDRDphCKEhPHz1PImH8"
+        },
+        {
+          "name": "Write",
+          "id": "pJmhXqXXRBJm7UBGgdKyZdqPSoUPTKfI"
+        },
+        {
+          "name": "Write",
+          "id": "O61Nq1FHV7BggZrUPK45moM0ZQM8rNGs"
+        },
+        {
+          "name": "Write",
+          "id": "hYkQYyW7dAJsD7uH36DOPTRxBA4g9ssd"
+        }
+      ],
+      "tool_error_count": 0,
+      "usage": {
+        "input_tokens": 1969,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 962,
+        "output_tokens": 514
+      },
+      "turns": 2,
+      "expected_file_content": "amber-willow-kite\n",
+      "actual_file_content": "The content of the file.",
+      "passed": false
+    },
+    {
+      "experiment": "short prompt, sampled",
+      "model_file": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "model_sha256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d",
+      "claude_version": "2.1.266 (Claude Code)",
+      "llama_arguments": [
+        "--alias",
+        "qwen2.5-3b",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "40981",
+        "-c",
+        "16384",
+        "-t",
+        "4",
+        "-ngl",
+        "0",
+        "-np",
+        "1",
+        "--jinja",
+        "--chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--temp",
+        "0.7",
+        "--top-p",
+        "0.8",
+        "--top-k",
+        "20",
+        "--min-p",
+        "0",
+        "--seed",
+        "42",
+        "--no-webui"
+      ],
+      "elapsed_s": 48.769,
+      "mcp_is_error": false,
+      "status": "completed",
+      "exit_code": 0,
+      "result": "DONE",
+      "tool_calls": [
+        {
+          "name": "Read",
+          "id": "SUlCBktIAJLKpQOGCTL8hqoHVfaNBPnP"
+        },
+        {
+          "name": "Write",
+          "id": "cbY1lbJaoR4mKwhFfLaFtvFsXLCwq1Ey"
+        },
+        {
+          "name": "Write",
+          "id": "K9KoPZCPBGeMIZASERMVBRhLsC963mdC"
+        },
+        {
+          "name": "Write",
+          "id": "O2sK8EWd3iK6XskGPXSl0MvmZG6HqE3u"
+        }
+      ],
+      "tool_error_count": 0,
+      "usage": {
+        "input_tokens": 1138,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 1105,
+        "output_tokens": 148
+      },
+      "turns": 2,
+      "expected_file_content": "amber-willow-kite\n",
+      "actual_file_content": "DONE",
+      "passed": false
+    },
+    {
+      "experiment": "explicit sequential prompt, sampled",
+      "model_file": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "model_sha256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d",
+      "claude_version": "2.1.266 (Claude Code)",
+      "llama_arguments": [
+        "--alias",
+        "qwen2.5-3b",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "39887",
+        "-c",
+        "16384",
+        "-t",
+        "4",
+        "-ngl",
+        "0",
+        "-np",
+        "1",
+        "--jinja",
+        "--chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--temp",
+        "0.7",
+        "--top-p",
+        "0.8",
+        "--top-k",
+        "20",
+        "--min-p",
+        "0",
+        "--seed",
+        "42",
+        "--no-webui"
+      ],
+      "elapsed_s": 96.517,
+      "mcp_is_error": false,
+      "status": "completed",
+      "exit_code": 0,
+      "result": "DONE",
+      "tool_calls": [
+        {
+          "name": "Read",
+          "id": "m7pMhfO52bMqC6chTLDJu8C1XFebQatP"
+        },
+        {
+          "name": "Write",
+          "id": "eLnDgeZ1gAkTKNzOXdlObdD6R56ED4t1"
+        },
+        {
+          "name": "Write",
+          "id": "RRx3ISA1dp5MCgln924STlJ0boQlb758"
+        },
+        {
+          "name": "Write",
+          "id": "qypa0c3ouB7KBWby4oqplD8pTOb2hIv0"
+        },
+        {
+          "name": "Write",
+          "id": "gcyBp7lux7JKTLZUyKo6NaPZxCpBy5yg"
+        },
+        {
+          "name": "Write",
+          "id": "IcK4s3gvPc9uh9LrPulgZQouhnAY3YHw"
+        }
+      ],
+      "tool_error_count": 0,
+      "usage": {
+        "input_tokens": 1296,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2618,
+        "output_tokens": 267
+      },
+      "turns": 3,
+      "expected_file_content": "amber-willow-kite\n",
+      "actual_file_content": "DONE",
+      "passed": false
+    }
+  ]
+}

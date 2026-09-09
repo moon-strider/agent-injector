@@ -42,7 +42,7 @@ Ollama installation. Then configure Agent Injector in your shell:
 
 ```bash
 export LLM_BASE_URL=http://127.0.0.1:8080
-export LLM_MODEL=qwen3-1.7b
+export LLM_MODEL=local-model
 export AGENT_WORKING_ROOT=/absolute/path/to/your/workspace
 
 uvx --from git+https://github.com/moon-strider/agent-injector agent-injector --check
@@ -62,7 +62,7 @@ Add the server to your MCP client's configuration (replace the workspace path):
       "args": ["--from", "git+https://github.com/moon-strider/agent-injector", "agent-injector"],
       "env": {
         "LLM_BASE_URL": "http://127.0.0.1:8080",
-        "LLM_MODEL": "qwen3-1.7b",
+        "LLM_MODEL": "local-model",
         "AGENT_WORKING_ROOT": "/absolute/path/to/your/workspace"
       }
     }

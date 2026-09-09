@@ -109,7 +109,7 @@ async def terminate_process(proc: asyncio.subprocess.Process) -> None:
         try:
             if os.name == "posix":
                 os.killpg(proc.pid, sig)
-            elif proc.returncode is None:  # pragma: no cover - Windows CI exercises CLI
+            elif proc.returncode is None:  # pragma: no cover - unsupported Windows fallback
                 proc.terminate() if sig == signal.SIGTERM else proc.kill()
         except ProcessLookupError:
             pass

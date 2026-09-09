@@ -24,7 +24,8 @@ from mcp.client.stdio import stdio_client
 
 async def exercise(args: argparse.Namespace, root: Path, port: int) -> dict:
     fixture = "amber-willow-kite\n"
-    (root / "input.txt").write_text(fixture)
+    expected_bytes = fixture.encode("utf-8")
+    (root / "input.txt").write_bytes(expected_bytes)
     env = {k: v for k, v in os.environ.items() if k in {"PATH", "LANG", "LC_ALL", "TMPDIR"}}
     env.update(
         LLM_BASE_URL=f"http://127.0.0.1:{port}",
@@ -35,8 +36,10 @@ async def exercise(args: argparse.Namespace, root: Path, port: int) -> dict:
         AGENT_MAX_CONCURRENT="1",
         AGENT_OUTPUT_TOKENS="512",
         AGENT_SYSTEM_PROMPT=(
-            "You are a precise file assistant. Use the provided tools. "
-            "Follow the user's instructions exactly. Be concise."
+            "You copy files using tools. Call exactly one tool per response. "
+            "First call Read, then wait for its tool result before calling Write. "
+            "Write the actual source text, without the Read tool's displayed line numbers. "
+            "Never invent file contents. After Write succeeds, reply DONE."
         ),
     )
     params = StdioServerParameters(command=sys.executable, args=["-m", "agent_injector"], env=env)
@@ -63,15 +66,17 @@ async def exercise(args: argparse.Namespace, root: Path, port: int) -> dict:
                     },
                 )
                 output = root / "result.txt"
-                observed = output.read_text() if output.exists() else None
+                observed = output.read_bytes() if output.exists() else None
                 report = {
                     "server": initialized.serverInfo.model_dump(mode="json"),
                     "status": status.structuredContent,
                     "elapsed_s": round(time.monotonic() - started, 3),
                     "mcp_result": result.model_dump(mode="json"),
                     "expected_file_content": fixture,
-                    "actual_file_content": observed,
-                    "passed": not result.isError and observed == fixture,
+                    "actual_file_content": observed.decode("utf-8", errors="replace")
+                    if observed is not None
+                    else None,
+                    "passed": not result.isError and observed == expected_bytes,
                 }
                 print(json.dumps(report, indent=2), flush=True)
                 return report
