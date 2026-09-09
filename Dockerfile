@@ -1,18 +1,20 @@
-FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS uv
+FROM node:22-bookworm-slim AS claude
+ARG CLAUDE_CODE_VERSION=2.1.266
+RUN npm install --prefix /opt/claude --no-audit --no-fund \
+    @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
+FROM ghcr.io/astral-sh/uv:0.12.8 AS uv
+FROM python:3.12-slim-bookworm
+COPY --from=uv /uv /usr/local/bin/uv
+COPY --from=claude /opt/claude /opt/claude
+ENV PATH="/opt/claude/node_modules/.bin:/app/.venv/bin:$PATH"
 WORKDIR /app
-
-ENV UV_COMPILE_BYTECODE=1
-
-COPY pyproject.toml /app/pyproject.toml
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install -r /app/pyproject.toml --no-dev --no-editable
-
-ADD src /app/src
-
-ENV MINIMAX_API_KEY=""
-ENV MINIMAX_MODEL="MiniMax-M2.5"
-ENV MINIMAX_BASE_URL="https://api.minimax.io/anthropic"
-
-ENTRYPOINT ["uv", "run", "agent-injector"]
+COPY pyproject.toml uv.lock README.md LICENSE ./
+COPY src ./src
+RUN uv sync --frozen --no-dev --no-editable \
+    && useradd --create-home --uid 10001 agent \
+    && mkdir /work && chown agent:agent /work
+ENV AGENT_WORKING_ROOT=/work
+USER agent
+WORKDIR /work
+ENTRYPOINT ["agent-injector"]
