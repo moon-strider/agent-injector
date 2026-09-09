@@ -60,7 +60,7 @@ jobs:
         run: npm install --prefix "$RUNNER_TEMP/claude" --no-audit --no-fund @anthropic-ai/claude-code@2.1.266
       - name: Exercise real CLI tools through a local Anthropic fixture
         run: AGENT_TEST_CLAUDE="$RUNNER_TEMP/claude/node_modules/.bin/claude" uv run --no-sync pytest tests/test_claude_integration.py --junitxml=junit.xml
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: claude-integration-results
