@@ -17,6 +17,7 @@ provides the tools; the selected model decides how to use them.
 - Deadlines including queue time, bounded output and retained results, process cleanup.
 - Required tool checks that distinguish model text from actual tool execution.
 - Configuration diagnostics without starting a model request.
+- MCP SDK 2, verified with legacy and current protocol clients and external mcp-probe.
 
 This is a **trusted local stdio server**, not a hosted multi-user service or an OS
 sandbox. Tools run with the local account's permissions. Working-directory checks

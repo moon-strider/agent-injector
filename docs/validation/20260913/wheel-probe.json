@@ -1,0 +1,53 @@
+{
+  "claude_version": "2.1.266 (Claude Code)",
+  "probe_version": "mcp-probe 0.2.0",
+  "protocols": [
+    {
+      "protocol": "2025-11-25",
+      "fixture_only": true,
+      "probe_exit_code": 0,
+      "probe_summary": {
+        "total": 34,
+        "passed": 21,
+        "failed": 0,
+        "warnings": 0,
+        "skipped": 8,
+        "info": 5
+      },
+      "fixture_errors": [],
+      "anthropic_requests": 3,
+      "successful_tool_results": [
+        "Read",
+        "Write"
+      ],
+      "file_matches": true,
+      "expected_sha256": "0314401e9a757f56a399fdb0344fab65aa0f9142e660dabbad01a50956d9ce76",
+      "observed_sha256": "0314401e9a757f56a399fdb0344fab65aa0f9142e660dabbad01a50956d9ce76",
+      "passed": true
+    },
+    {
+      "protocol": "2026-07-28",
+      "fixture_only": true,
+      "probe_exit_code": 0,
+      "probe_summary": {
+        "total": 34,
+        "passed": 20,
+        "failed": 0,
+        "warnings": 0,
+        "skipped": 12,
+        "info": 2
+      },
+      "fixture_errors": [],
+      "anthropic_requests": 3,
+      "successful_tool_results": [
+        "Read",
+        "Write"
+      ],
+      "file_matches": true,
+      "expected_sha256": "0314401e9a757f56a399fdb0344fab65aa0f9142e660dabbad01a50956d9ce76",
+      "observed_sha256": "0314401e9a757f56a399fdb0344fab65aa0f9142e660dabbad01a50956d9ce76",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

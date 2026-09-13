@@ -13,8 +13,8 @@ from agent_injector.server import Application
 
 
 def payload(result):
-    assert result.structuredContent == json.loads(result.content[0].text)
-    return result.structuredContent
+    assert result.structured_content == json.loads(result.content[0].text)
+    return result.structured_content
 
 
 async def call(app, name, args=None):
@@ -25,7 +25,7 @@ async def test_contracts_errors_and_diagnostics(settings):
     app = Application(settings)
     schemas = await app.list_tools()
     assert len(schemas) == 10
-    assert all(t.inputSchema["additionalProperties"] is False for t in schemas)
+    assert all(t.input_schema["additionalProperties"] is False for t in schemas)
     status = payload(await call(app, "llm_status"))
     assert status["claude_available"] and status["providers"] == [
         {"name": "custom", "model": "fixture"}
@@ -40,7 +40,7 @@ async def test_contracts_errors_and_diagnostics(settings):
         ("llm_run", {"prompt": "x", "provider": "missing"}, "configuration_error"),
     ]:
         result = await call(app, name, args)
-        assert result.isError and payload(result)["error"]["code"] == code
+        assert result.is_error and payload(result)["error"]["code"] == code
     invalid = await call(app, "llm_run", {"prompt": ["private-sensitive-input"]})
     assert "private-sensitive-input" not in json.dumps(payload(invalid))
 
@@ -48,18 +48,18 @@ async def test_contracts_errors_and_diagnostics(settings):
 async def test_sync_async_poll_result_and_cancel(settings):
     app = Application(settings)
     success = await call(app, "llm_run", {"prompt": "hello"})
-    assert not success.isError and payload(success)["result"] == "hello"
+    assert not success.is_error and payload(success)["result"] == "hello"
     failed = await call(app, "llm_run", {"prompt": "cli-error"})
-    assert failed.isError and payload(failed)["status"] == "failed"
+    assert failed.is_error and payload(failed)["status"] == "failed"
     started = payload(await call(app, "llm_start", {"prompt": "slow"}))
     identity = {"task_id": started["task_id"]}
     poll = payload(await call(app, "llm_poll", identity))
     assert poll["status"] in {"queued", "running"} and "partial_output" in poll
-    assert (await call(app, "llm_result", identity)).isError
+    assert (await call(app, "llm_result", identity)).is_error
     cancelled = await call(app, "llm_cancel", identity)
-    assert not cancelled.isError and payload(cancelled)["status"] == "cancelled"
+    assert not cancelled.is_error and payload(cancelled)["status"] == "cancelled"
     result = await call(app, "llm_result", identity)
-    assert result.isError and payload(result)["status"] == "cancelled"
+    assert result.is_error and payload(result)["status"] == "cancelled"
     assert payload(await call(app, "llm_cancel", identity))["status"] == "cancelled"
 
 
@@ -102,7 +102,7 @@ async def test_dispatch_internal_error_sanitized(settings, monkeypatch):
 
     monkeypatch.setattr(app, "dispatch", boom)
     result = await call(app, "llm_status")
-    assert result.isError and "private-secret" not in str(result)
+    assert result.is_error and "private-secret" not in str(result)
 
 
 async def test_real_stdio_mcp_transport(settings, tmp_path):
@@ -119,19 +119,19 @@ async def test_real_stdio_mcp_transport(settings, tmp_path):
         async with stdio_client(params, errlog=err) as (read, write):
             async with ClientSession(read, write) as session:
                 initialized = await session.initialize()
-                assert initialized.serverInfo.version == "0.2.0"
+                assert initialized.server_info.version == "0.2.0"
                 assert len((await session.list_tools()).tools) == 10
                 result = await session.call_tool(
                     "llm_run",
                     {"prompt": "tool", "allowed_tools": ["Read"], "required_tools": ["Read"]},
                 )
-                assert not result.isError and payload(result)["tool_calls"][0]["name"] == "Read"
+                assert not result.is_error and payload(result)["tool_calls"][0]["name"] == "Read"
                 result = await session.call_tool("llm_run", {"prompt": "cli-error"})
-                assert result.isError and payload(result)["status"] == "failed"
+                assert result.is_error and payload(result)["status"] == "failed"
                 invalid = await session.call_tool(
                     "llm_run", {"prompt": "x", "timeout_seconds": False}
                 )
-                assert invalid.isError
+                assert invalid.is_error
 
 
 def test_cli_check_version_invalid_configuration(settings, tmp_path):
@@ -171,7 +171,7 @@ async def test_spawn_os_error_is_terminal(settings, monkeypatch):
 
     monkeypatch.setattr(asyncio, "create_subprocess_exec", fail)
     result = await call(app, "llm_run", {"prompt": "x"})
-    assert result.isError and payload(result)["error"]["code"] == "spawn_failed"
+    assert result.is_error and payload(result)["error"]["code"] == "spawn_failed"
     assert "private-path" not in str(result)
 
 

@@ -6,11 +6,20 @@ import asyncio
 import json
 import logging
 import shutil
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any
 
-from mcp.server import Server
+from mcp.server import Server, ServerRequestContext
 from mcp.server.stdio import stdio_server
-from mcp.types import CallToolResult, TextContent, Tool
+from mcp.types import (
+    CallToolRequestParams,
+    CallToolResult,
+    ListToolsResult,
+    PaginatedRequestParams,
+    TextContent,
+    Tool,
+)
 from pydantic import ValidationError
 
 from . import __version__
@@ -58,8 +67,8 @@ CONTRACTS: dict[str, tuple[type[Input], str]] = {
 def response(payload: dict[str, Any], *, error: bool = False) -> CallToolResult:
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
-        structuredContent=payload,
-        isError=error,
+        structured_content=payload,
+        is_error=error,
     )
 
 
@@ -67,14 +76,28 @@ class Application:
     def __init__(self, settings: Settings):
         self.settings = settings
         self.manager = TaskManager(settings)
-        self.server: Server[Any, Any] = Server("agent-injector", version=__version__)
-        self.server.list_tools()(self.list_tools)  # type: ignore[no-untyped-call]
-        # Use the published Pydantic contract without reflecting raw input in SDK errors.
-        self.server.call_tool(validate_input=False)(self.call_tool)
+        self.server: Server[None] = Server(
+            "agent-injector",
+            version=__version__,
+            lifespan=self.lifespan,
+            on_list_tools=self.on_list_tools,
+            on_call_tool=self.on_call_tool,
+        )
+
+    async def on_list_tools(
+        self, context: ServerRequestContext[None], params: PaginatedRequestParams | None
+    ) -> ListToolsResult:
+        return ListToolsResult(tools=await self.list_tools())
+
+    async def on_call_tool(
+        self, context: ServerRequestContext[None], params: CallToolRequestParams
+    ) -> CallToolResult:
+        # Validate with our published contract without reflecting raw input in errors.
+        return await self.call_tool(params.name, params.arguments or {})
 
     async def list_tools(self) -> list[Tool]:
         return [
-            Tool(name=name, description=description, inputSchema=model.model_json_schema())
+            Tool(name=name, description=description, input_schema=model.model_json_schema())
             for name, (model, description) in CONTRACTS.items()
         ]
 
@@ -201,7 +224,8 @@ class Application:
             }
         return {"instructions": USAGE}
 
-    async def run(self) -> None:
+    @asynccontextmanager
+    async def lifespan(self, server: Server[None]) -> AsyncIterator[None]:
         async def cleanup() -> None:
             while True:
                 await asyncio.sleep(min(30, self.settings.retention_seconds))
@@ -209,12 +233,15 @@ class Application:
 
         cleaner = asyncio.create_task(cleanup())
         try:
-            async with stdio_server() as (read, write):
-                await self.server.run(read, write, self.server.create_initialization_options())
+            yield
         finally:
             cleaner.cancel()
             await asyncio.gather(cleaner, return_exceptions=True)
             await self.manager.close()
+
+    async def run(self) -> None:
+        async with stdio_server() as (read, write):
+            await self.server.run(read, write, self.server.create_initialization_options())
 
 
 async def main_async() -> None:
