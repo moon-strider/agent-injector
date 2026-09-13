@@ -1,0 +1,90 @@
+{
+  "server": {
+    "name": "agent-injector",
+    "title": null,
+    "version": "0.2.0",
+    "description": null,
+    "website_url": null,
+    "icons": null
+  },
+  "status": {
+    "version": "0.2.0",
+    "claude_available": true,
+    "providers": [
+      {
+        "name": "custom",
+        "model": "qwen3-4b-instruct"
+      }
+    ],
+    "default_provider": null,
+    "default_model": null,
+    "working_root": "/tmp/agent-live-jfmr5qcm",
+    "allowed_tools": [
+      "Bash",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Read",
+      "Write"
+    ],
+    "limits": {
+      "concurrent": 1,
+      "queued": 32,
+      "retained": 128,
+      "timeout_seconds": 1200,
+      "turns": 100,
+      "output_bytes": 1048576,
+      "retention_seconds": 900
+    }
+  },
+  "elapsed_s": 43.896,
+  "mcp_result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"task_id\": \"939a0bc8b16a42e99e4cde4194614ec9\", \"status\": \"completed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct\", \"elapsed_seconds\": 43.89, \"execution_seconds\": 43.889, \"exit_code\": 0, \"error\": null, \"result\": \"DONE\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {\"input_tokens\": 1108, \"cache_creation_input_tokens\": 0, \"cache_read_input_tokens\": 2131, \"output_tokens\": 75}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"JD85QqNafjYPJtNkeitahkbCWqM4eoFw\"}, {\"name\": \"Write\", \"id\": \"JY9pUZ6K6HfzZj6iuGnlL4kwbzl6EIBj\"}], \"tool_error_count\": 0, \"turns\": 3}",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structured_content": {
+      "task_id": "939a0bc8b16a42e99e4cde4194614ec9",
+      "status": "completed",
+      "provider": "custom",
+      "model": "qwen3-4b-instruct",
+      "elapsed_seconds": 43.89,
+      "execution_seconds": 43.889,
+      "exit_code": 0,
+      "error": null,
+      "result": "DONE",
+      "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct\",\"query_source\":\"sdk\"}\n",
+      "usage": {
+        "input_tokens": 1108,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2131,
+        "output_tokens": 75
+      },
+      "tool_calls": [
+        {
+          "name": "Read",
+          "id": "JD85QqNafjYPJtNkeitahkbCWqM4eoFw"
+        },
+        {
+          "name": "Write",
+          "id": "JY9pUZ6K6HfzZj6iuGnlL4kwbzl6EIBj"
+        }
+      ],
+      "tool_error_count": 0,
+      "turns": 3
+    },
+    "is_error": false,
+    "result_type": "complete"
+  },
+  "expected_file_content": "amber-willow-kite\n",
+  "actual_file_content": "amber-willow-kite\n",
+  "passed": true,
+  "model_sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+  "model_file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "claude_version": "2.1.266 (Claude Code)"
+}

@@ -20,8 +20,9 @@ and include the reason for a dependency change.
 
 1. Ordinary pytest tests use strict input contracts and deterministic CLI fixtures.
    The fixture is a real subprocess but is **not Claude Code or an LLM**.
-2. The stdio test starts the installed MCP server and uses the official MCP client
-   to initialize, list tools, execute tasks and verify error flags.
+2. The stdio tests start the installed MCP server with legacy and current official
+   MCP clients. They cover initialization, tools, batch queues, results, errors,
+   cancellation and process cleanup after a client disconnects.
 3. The opt-in Claude Code test uses the actual installed CLI with a deterministic
    local Anthropic HTTP/SSE fixture. It verifies actual file reads/writes and
    exact tool availability without model weights, cloud keys or cloud charges:
@@ -31,7 +32,24 @@ and include the reason for a dependency change.
      uv run --frozen pytest tests/test_claude_integration.py
    ```
 
-4. `scripts/live_smoke.py` runs a real CPU model, actual CLI and stdio server, then
+4. `scripts/probe_smoke.py` runs the external mcp-probe CLI against protocols
+   `2025-11-25` and `2026-07-28`, including active tool cases and strict checks.
+   It uses a deterministic Anthropic fixture and verifies actual Claude Read/Write
+   results and exact UTF-8 file bytes. Install the probe in a separate environment:
+
+   ```bash
+   uv venv /tmp/agent-probe
+   uv pip install --python /tmp/agent-probe/bin/python \
+     'mcp-probe[full] @ git+https://github.com/moon-strider/mcp-probe.git@21d435e8ab68b216a98a14a5f147730912edef7c'
+   uv run --frozen python scripts/probe_smoke.py \
+     --claude /absolute/path/to/claude \
+     --probe /tmp/agent-probe/bin/mcp-probe \
+     --output-dir /tmp/agent-probe-results
+   ```
+
+   Reports include skips for unsupported optional features; no fixture result is
+   evidence of model intelligence. CI installs the pinned probe and Claude versions.
+5. `scripts/live_smoke.py` runs a real CPU model, actual CLI and stdio server, then
    checks the filesystem result. See [local inference](docs/local-inference.md).
    This is opt-in because downloads and inference are much heavier than unit tests.
 

@@ -6,6 +6,41 @@ resource bounds, credentials, package/plugin metadata, container setup,
 documentation and validation. This is a source/runtime review, not a formal
 security certification or a model-quality guarantee.
 
+## Follow-up validation: September 13
+
+The MCP dependency now targets SDK `>=2.2,<3`. Typed request callbacks replace
+the removed decorator API, and the SDK lifespan owns retention cleanup and task
+shutdown. The public tool names, input schemas and task behavior stay the same.
+
+The complete local suite passes **87 tests** on Python 3.12.14, including actual
+Claude Code, with **92.15%** combined coverage. The non-inference tests also pass
+on Python 3.11.16. Real stdio tests cover both legacy and `2026-07-28` protocols,
+batch admission, queued tasks, result/error handling, cancellation and disconnects.
+Cancellation checks include SIGTERM-resistant children and reuse of the freed slot.
+
+External mcp-probe checks pass against both the checkout and an independently
+installed wheel using real Claude Code and a deterministic Anthropic fixture:
+
+| Protocol | Pass | Skip | Info | Fail / warning |
+| --- | ---: | ---: | ---: | ---: |
+| 2025-11-25 | 21 | 8 | 5 | 0 / 0 |
+| 2026-07-28 | 20 | 12 | 2 | 0 / 0 |
+
+The probe verifies advertised schemas, rejected invalid inputs, actual Read/Write
+results and exact UTF-8 file bytes. Unsupported optional features are skipped.
+The [fixture report](validation/20260913/probe.json) and
+[clean-wheel report](validation/20260913/wheel-probe.json) distinguish these checks
+from inference. CI now runs this external consumer as its own job. A probe timeout
+produces failed evidence and gives the transport a bounded opportunity to clean up;
+existing evidence directories cannot be overwritten.
+
+Ruff, formatting, strict mypy, wheel/sdist builds and clean installation passed.
+The installed dependency audit reported no known advisories. Local Docker is not
+available; the existing package/container CI job remains the Docker verification.
+The expanded real-model suite and its observed limitations are recorded in the
+[local inference guide](local-inference.md). Results below describe the earlier
+September 9 audit and are retained as historical evidence.
+
 ## Findings and changes
 
 | Area | Original behavior | Resolution |

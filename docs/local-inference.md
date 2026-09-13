@@ -35,17 +35,37 @@ of the transport does not establish tool competence of every model.
 
 Stock Claude Code prompts/tool descriptions can be large. For a constrained local
 experiment, `AGENT_SYSTEM_PROMPT` can replace the system prompt with a short one.
-This changes the agent's behavior and must be reported with the result. The audit's
-smoke driver uses a short prompt, two explicitly authorized tools and a temporary
+This changes the agent's behavior and must be reported with the result. The smoke
+driver uses a short prompt, two explicitly authorized tools and a temporary
 synthetic workspace. It does not benchmark stock Claude Code on a real codebase.
+When replacing the system prompt, include the actual working directory in the
+task or use absolute file paths. A process's current directory is not information
+the model can infer. Read output also contains display-only line numbers; the
+copy task explicitly tells the model to omit them and preserve the final newline.
+
+The September 13 checks use [Qwen3-4B-Instruct-2507](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507),
+quantized by [Unsloth](https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF):
+
+- File: `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` (2,497,281,120 bytes).
+- Quantization repository revision: `a06e946bb6b655725eafa393f4a9745d460374c9`.
+- SHA-256: `3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597`.
+- Runtime: llama.cpp `b10867`, commit `f3f1a8f27`; Claude Code `2.1.266`.
+
+Download the [pinned model file](https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF/resolve/a06e946bb6b655725eafa393f4a9745d460374c9/Qwen3-4B-Instruct-2507-Q4_K_M.gguf)
+and verify its hash before running. This is an Apache-2.0 Qwen model with a
+third-party quantization. Use the same model alias in llama.cpp and `LLM_MODEL`.
 
 ## Run the complete smoke check
 
 The driver starts the local model process itself, then launches the actual MCP
-server and Claude CLI in the same local network namespace. It asks the model to
-read one file and copy its exact contents to another through `Read` and `Write`.
-It checks both MCP success and the final file bytes. Missing/wrong content exits
-nonzero even if the CLI claimed success.
+server and Claude CLI in the same local network namespace. Three scenarios check
+multiline copying, a single configuration edit, and a prescribed Python range
+correction. Each uses a fresh random marker that appears only in the input file.
+The model must Read, Write/Edit, then Read again. External checks compare every
+expected file byte, including preserved content. The corrected Python fixture
+also runs five function cases, only after matching the predetermined safe source.
+This code-edit scenario tests following an explicit correction, not autonomous
+bug diagnosis. Missing/wrong content exits nonzero even if the CLI claimed success.
 
 ```bash
 uv run --frozen python scripts/live_smoke.py \
@@ -53,11 +73,15 @@ uv run --frozen python scripts/live_smoke.py \
   --llama-server /absolute/path/to/llama-server \
   --model-file /absolute/path/to/model.gguf \
   --model-name local-model \
+  --scenario all --runs 3 --threads 4 --timeout 300 \
   --log-dir /tmp/agent-live-check
 ```
 
-The script records the model checksum, exact server command, Claude version, MCP
-result and actual/expected content. It downloads nothing and uses no cloud keys.
+Use a new log directory for each run; existing evidence is never overwritten.
+`--scenario copy`, `edit` or `code` selects one scenario; `--runs` repeats it with
+new markers. The script records model/runtime versions, checksum, exact commands,
+custom system prompt, MCP requests/results, timing, and actual/expected files.
+It downloads nothing and uses no cloud keys.
 It stops its model process and removes its temporary task workspace afterward.
 Logs remain in the explicitly requested directory.
 
@@ -67,9 +91,43 @@ different settings. See the publisher's
 [sampling guidance](https://huggingface.co/Qwen/Qwen3-1.7B#best-practices).
 The server context is 16384 tokens, with four CPU threads and no GPU layers.
 
-## Evidence and interpretation
+## September 13 model checks
 
-The audit tested the actual Claude Code **2.1.266** binary and llama.cpp **b10867**
+The newer Qwen3-4B configuration passed the original single-line copy task in
+43.896 seconds; [the result](validation/20260913/initial-copy.json) records actual
+Read/Write events and matching content. A stronger nine-case suite then exposed
+failures hidden by that simple task: **3/9 passed** (all three configuration edits).
+For relative-path copy/code prompts the model sometimes invented an absolute path;
+one multiline copy included Read's display-only line numbers. The
+[complete first-suite evidence](validation/20260913/relative-paths.json) retains
+every failure, expected/actual file, request, result and the original driver.
+
+The current driver explicitly supplies the temporary working directory and
+explains how to remove Read's line-number prefixes. Its file, tool and function
+assertions are unchanged. These are operational instructions for the short custom
+prompt; they do not modify the generated files after the model runs.
+
+With these instructions, **9/9 fresh cases passed** through actual llama.cpp,
+Claude Code and stdio MCP:
+
+| Scenario | Passed | Task seconds, range |
+| --- | ---: | ---: |
+| Exact multiline copy | 3/3 | 30.777–54.027 |
+| Change one configuration value | 3/3 | 29.691–51.585 |
+| Prescribed code edit plus five function cases | 3/3 | 31.685–33.526 |
+
+[Full evidence](validation/20260913/explicit-context.json) includes every request,
+actual/expected file, observed tool sequence, token usage, result and driver source.
+[Checksums](validation/20260913/sha256.json) cover the retained evidence files.
+Timings exclude model startup; requests share one warmed CPU server. These are
+three repetitions of small controlled tasks with new markers, not a reliability
+estimate for arbitrary repositories. The short custom prompt, explicit paths and
+copy instructions are part of the tested configuration. The previous failures
+remain recorded; stock Claude Code prompts and paid providers were not evaluated.
+
+## September 9 evidence and interpretation
+
+The September 9 audit tested the actual Claude Code **2.1.266** binary and llama.cpp **b10867**
 (commit `f3f1a8f27`). The deterministic HTTP integration independently proves that
 the real CLI can read/write the synthetic files through Agent Injector.
 

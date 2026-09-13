@@ -1,0 +1,2359 @@
+{
+  "summary.json": {
+    "passed": false,
+    "scenario": "all",
+    "runs": 3,
+    "cases": [
+      {
+        "case": "run-001-copy",
+        "scenario": "copy",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-copy-5bu1sio2",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 48.452,
+        "elapsed_total_s": 50.02,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": false
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-001-edit",
+        "scenario": "edit",
+        "passed": true,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-edit-6u6ocv2w",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 49.222,
+        "elapsed_total_s": 50.635,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": true
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-001-code",
+        "scenario": "code",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-code-b9h360c5",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 41.082,
+        "elapsed_total_s": 42.485,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false,
+          "code_test_cases": false
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-002-copy",
+        "scenario": "copy",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-copy-c060xd24",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 30.025,
+        "elapsed_total_s": 31.425,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": false
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-002-edit",
+        "scenario": "edit",
+        "passed": true,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-edit-vkq019gq",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 23.616,
+        "elapsed_total_s": 25.069,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": true
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-002-code",
+        "scenario": "code",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-code-_whjk25p",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 14.016,
+        "elapsed_total_s": 15.402,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false,
+          "code_test_cases": false
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-003-copy",
+        "scenario": "copy",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-copy-30bw7orv",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 13.97,
+        "elapsed_total_s": 15.322,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-003-edit",
+        "scenario": "edit",
+        "passed": true,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-edit-7irio0hr",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 22.631,
+        "elapsed_total_s": 23.947,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": true
+        },
+        "code_result": null
+      },
+      {
+        "case": "run-003-code",
+        "scenario": "code",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-code-el73aj60",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 14.89,
+        "elapsed_total_s": 16.281,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false,
+          "code_test_cases": false
+        },
+        "code_result": null
+      }
+    ],
+    "model_sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+    "model_file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "model_name": "qwen3-4b-instruct-2507",
+    "claude_version": "2.1.266 (Claude Code)",
+    "llama_version": "version: 0.4.0-dev (build 10867, commit f3f1a8f27)\nbuilt with GNU 11.4.0 for Linux x86_64",
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "system_prompt": "Use tools to perform the task. Call exactly one tool per response. First read the actual file and wait for its tool result. Never invent contents or copy the Read tool's displayed line numbers. After changing a file, Read it again to verify. Then reply DONE.",
+    "server_command": [
+      "/workspace/scratch/b33fb38091a9/model-runtime/llama-b10867/llama-server",
+      "-m",
+      "/workspace/scratch/b33fb38091a9/model-runtime/Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+      "--alias",
+      "qwen3-4b-instruct-2507",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "34077",
+      "-c",
+      "16384",
+      "-t",
+      "4",
+      "-ngl",
+      "0",
+      "-np",
+      "1",
+      "--jinja",
+      "--chat-template-kwargs",
+      "{\"enable_thinking\":false}",
+      "--temp",
+      "0.7",
+      "--top-p",
+      "0.8",
+      "--top-k",
+      "20",
+      "--min-p",
+      "0",
+      "--seed",
+      "42",
+      "--no-webui",
+      "--api-key",
+      "local-smoke-only"
+    ]
+  },
+  "provenance.json": {
+    "passed": false,
+    "scenario": "all",
+    "runs": 3,
+    "cases": [],
+    "model_sha256": "3605803b982cb64aead44f6c1b2ae36e3acdb41d8e46c8a94c6533bc4c67e597",
+    "model_file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "model_name": "qwen3-4b-instruct-2507",
+    "claude_version": "2.1.266 (Claude Code)",
+    "llama_version": "version: 0.4.0-dev (build 10867, commit f3f1a8f27)\nbuilt with GNU 11.4.0 for Linux x86_64",
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "system_prompt": "Use tools to perform the task. Call exactly one tool per response. First read the actual file and wait for its tool result. Never invent contents or copy the Read tool's displayed line numbers. After changing a file, Read it again to verify. Then reply DONE.",
+    "server_command": [
+      "/workspace/scratch/b33fb38091a9/model-runtime/llama-b10867/llama-server",
+      "-m",
+      "/workspace/scratch/b33fb38091a9/model-runtime/Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+      "--alias",
+      "qwen3-4b-instruct-2507",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "34077",
+      "-c",
+      "16384",
+      "-t",
+      "4",
+      "-ngl",
+      "0",
+      "-np",
+      "1",
+      "--jinja",
+      "--chat-template-kwargs",
+      "{\"enable_thinking\":false}",
+      "--temp",
+      "0.7",
+      "--top-p",
+      "0.8",
+      "--top-k",
+      "20",
+      "--min-p",
+      "0",
+      "--seed",
+      "42",
+      "--no-webui",
+      "--api-key",
+      "local-smoke-only"
+    ]
+  },
+  "cases.json": [
+    {
+      "case": "run-001-copy",
+      "scenario": "copy",
+      "passed": false,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-copy-5bu1sio2",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 48.452,
+      "elapsed_total_s": 50.02,
+      "checks": {
+        "mcp_success": true,
+        "completed": true,
+        "no_task_error": true,
+        "no_tool_errors": true,
+        "at_least_three_tool_calls": true,
+        "read_before_change": true,
+        "mutation_tool_used": true,
+        "final_read": true,
+        "exact_files": false
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-001-edit",
+      "scenario": "edit",
+      "passed": true,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-edit-6u6ocv2w",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 49.222,
+      "elapsed_total_s": 50.635,
+      "checks": {
+        "mcp_success": true,
+        "completed": true,
+        "no_task_error": true,
+        "no_tool_errors": true,
+        "at_least_three_tool_calls": true,
+        "read_before_change": true,
+        "mutation_tool_used": true,
+        "final_read": true,
+        "exact_files": true
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-001-code",
+      "scenario": "code",
+      "passed": false,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-code-b9h360c5",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 41.082,
+      "elapsed_total_s": 42.485,
+      "checks": {
+        "mcp_success": false,
+        "completed": false,
+        "no_task_error": false,
+        "no_tool_errors": false,
+        "at_least_three_tool_calls": false,
+        "read_before_change": true,
+        "mutation_tool_used": false,
+        "final_read": true,
+        "exact_files": false,
+        "code_test_cases": false
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-002-copy",
+      "scenario": "copy",
+      "passed": false,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-copy-c060xd24",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 30.025,
+      "elapsed_total_s": 31.425,
+      "checks": {
+        "mcp_success": true,
+        "completed": true,
+        "no_task_error": true,
+        "no_tool_errors": false,
+        "at_least_three_tool_calls": true,
+        "read_before_change": true,
+        "mutation_tool_used": true,
+        "final_read": true,
+        "exact_files": false
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-002-edit",
+      "scenario": "edit",
+      "passed": true,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-edit-vkq019gq",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 23.616,
+      "elapsed_total_s": 25.069,
+      "checks": {
+        "mcp_success": true,
+        "completed": true,
+        "no_task_error": true,
+        "no_tool_errors": true,
+        "at_least_three_tool_calls": true,
+        "read_before_change": true,
+        "mutation_tool_used": true,
+        "final_read": true,
+        "exact_files": true
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-002-code",
+      "scenario": "code",
+      "passed": false,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-code-_whjk25p",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 14.016,
+      "elapsed_total_s": 15.402,
+      "checks": {
+        "mcp_success": false,
+        "completed": false,
+        "no_task_error": false,
+        "no_tool_errors": false,
+        "at_least_three_tool_calls": false,
+        "read_before_change": true,
+        "mutation_tool_used": false,
+        "final_read": true,
+        "exact_files": false,
+        "code_test_cases": false
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-003-copy",
+      "scenario": "copy",
+      "passed": false,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-copy-30bw7orv",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 13.97,
+      "elapsed_total_s": 15.322,
+      "checks": {
+        "mcp_success": false,
+        "completed": false,
+        "no_task_error": false,
+        "no_tool_errors": false,
+        "at_least_three_tool_calls": false,
+        "read_before_change": true,
+        "mutation_tool_used": false,
+        "final_read": true,
+        "exact_files": false
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-003-edit",
+      "scenario": "edit",
+      "passed": true,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-edit-7irio0hr",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 22.631,
+      "elapsed_total_s": 23.947,
+      "checks": {
+        "mcp_success": true,
+        "completed": true,
+        "no_task_error": true,
+        "no_tool_errors": true,
+        "at_least_three_tool_calls": true,
+        "read_before_change": true,
+        "mutation_tool_used": true,
+        "final_read": true,
+        "exact_files": true
+      },
+      "code_result": null
+    },
+    {
+      "case": "run-003-code",
+      "scenario": "code",
+      "passed": false,
+      "server": {
+        "name": "agent-injector",
+        "title": null,
+        "version": "0.2.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "status": {
+        "version": "0.2.0",
+        "claude_available": true,
+        "providers": [
+          {
+            "name": "custom",
+            "model": "qwen3-4b-instruct-2507"
+          }
+        ],
+        "default_provider": null,
+        "default_model": null,
+        "working_root": "/tmp/agent-live-code-el73aj60",
+        "allowed_tools": [
+          "Bash",
+          "Edit",
+          "Glob",
+          "Grep",
+          "Read",
+          "Write"
+        ],
+        "limits": {
+          "concurrent": 1,
+          "queued": 32,
+          "retained": 128,
+          "timeout_seconds": 300,
+          "turns": 100,
+          "output_bytes": 1048576,
+          "retention_seconds": 900
+        }
+      },
+      "elapsed_s": 14.89,
+      "elapsed_total_s": 16.281,
+      "checks": {
+        "mcp_success": false,
+        "completed": false,
+        "no_task_error": false,
+        "no_tool_errors": false,
+        "at_least_three_tool_calls": false,
+        "read_before_change": true,
+        "mutation_tool_used": false,
+        "final_read": true,
+        "exact_files": false,
+        "code_test_cases": false
+      },
+      "code_result": null
+    }
+  ],
+  "driver_source": "\"\"\"Verify real CPU inference through Claude Code, stdio MCP, and exact file checks.\n\nWeights and executables must already be installed. No cloud API is used.\nEach case has a fresh directory and random marker appearing only in file contents.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport asyncio\nimport hashlib\nimport json\nimport os\nimport secrets\nimport socket\nimport subprocess\nimport sys\nimport tempfile\nimport time\nimport urllib.request\nfrom dataclasses import dataclass\nfrom pathlib import Path\n\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\n\nSYSTEM_PROMPT = (\n    \"Use tools to perform the task. Call exactly one tool per response. \"\n    \"First read the actual file and wait for its tool result. Never invent contents \"\n    \"or copy the Read tool's displayed line numbers. After changing a file, \"\n    \"Read it again to verify. Then reply DONE.\"\n)\nSCENARIOS = (\"copy\", \"edit\", \"code\")\n\n\n@dataclass(frozen=True)\nclass Case:\n    name: str\n    prompt: str\n    mutation_tool: str\n    initial: dict[str, bytes]\n    expected: dict[str, bytes]\n\n\ndef make_case(name: str) -> Case:\n    marker = secrets.token_hex(12)\n    if name == \"copy\":\n        source = f\"first line\\nmarker={marker}\\nlast line\\n\".encode()\n        return Case(\n            name,\n            \"Read input.txt. Use Write to create result.txt with exactly the same complete \"\n            \"contents, preserving input.txt. Read result.txt after writing, then reply DONE.\",\n            \"Write\",\n            {\"input.txt\": source},\n            {\"input.txt\": source, \"result.txt\": source},\n        )\n    if name == \"edit\":\n        source = f\"enabled=true\\nmarker={marker}\\nretry_limit=3\\nmode=careful\\n\".encode()\n        return Case(\n            name,\n            \"Read config.txt. Use Edit to replace only retry_limit=3 with retry_limit=7. \"\n            \"Preserve every other byte. Read config.txt after editing, then reply DONE.\",\n            \"Edit\",\n            {\"config.txt\": source},\n            {\"config.txt\": source.replace(b\"retry_limit=3\", b\"retry_limit=7\")},\n        )\n    if name == \"code\":\n        source = f\"# marker={marker}\\ndef inclusive_sum(n):\\n    return sum(range(1, n))\\n\".encode()\n        return Case(\n            name,\n            \"Read sum.py. Fix inclusive_sum so the upper bound is included: use Edit to \"\n            \"replace range(1, n) with range(1, n + 1), preserving every other byte and \"\n            \"the comment. Read sum.py after editing, then reply DONE.\",\n            \"Edit\",\n            {\"sum.py\": source},\n            {\"sum.py\": source.replace(b\"range(1, n)\", b\"range(1, n + 1)\")},\n        )\n    raise ValueError(f\"Unknown scenario: {name}\")\n\n\ndef verify_case(case: Case, actual: dict[str, bytes | None], wire: dict) -> dict:\n    \"\"\"Check external bytes; execute code only after an exact trusted-code match.\"\"\"\n    payload = wire.get(\"structuredContent\") or {}\n    calls = [entry.get(\"name\") for entry in payload.get(\"tool_calls\", [])]\n    checks = {\n        \"mcp_success\": wire.get(\"isError\") is False,\n        \"completed\": payload.get(\"status\") == \"completed\",\n        \"no_task_error\": payload.get(\"error\") is None,\n        \"no_tool_errors\": payload.get(\"tool_error_count\") == 0,\n        \"at_least_three_tool_calls\": len(calls) >= 3,\n        \"read_before_change\": bool(calls) and calls[0] == \"Read\",\n        \"mutation_tool_used\": case.mutation_tool in calls,\n        \"final_read\": bool(calls) and calls[-1] == \"Read\",\n        \"exact_files\": all(actual.get(name) == value for name, value in case.expected.items()),\n    }\n    code_result = None\n    if case.name == \"code\":\n        checks[\"code_test_cases\"] = False\n        # A different model-written program is never executed, even if it claims success.\n        if checks[\"exact_files\"]:\n            program = actual[\"sum.py\"]\n            assert program is not None\n            checked = subprocess.run(\n                [\n                    sys.executable,\n                    \"-I\",\n                    \"-c\",\n                    \"import json,sys; namespace={}; \"\n                    \"exec(compile(sys.stdin.read(), '<verified-sum>', 'exec'), namespace); \"\n                    \"print(json.dumps([namespace['inclusive_sum'](n) for n in [-2,0,1,2,5]]))\",\n                ],\n                input=program,\n                capture_output=True,\n                timeout=5,\n                check=False,\n            )\n            code_result = {\n                \"inputs\": [-2, 0, 1, 2, 5],\n                \"expected\": [0, 0, 1, 3, 15],\n                \"stdout\": checked.stdout.decode(errors=\"replace\"),\n                \"stderr\": checked.stderr.decode(errors=\"replace\"),\n                \"exit_code\": checked.returncode,\n            }\n            checks[\"code_test_cases\"] = (\n                checked.returncode == 0 and json.loads(checked.stdout) == code_result[\"expected\"]\n            )\n    return {\"checks\": checks, \"code_result\": code_result, \"passed\": all(checks.values())}\n\n\ndef save_json(path: Path, value: object) -> None:\n    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + \"\\n\", encoding=\"utf-8\")\n\n\nasync def exercise(args: argparse.Namespace, case: Case, root: Path, evidence: Path, port: int):\n    await asyncio.to_thread(evidence.mkdir)\n    for folder, files in [(\"before\", case.initial), (\"expected\", case.expected)]:\n        (evidence / folder).mkdir()\n        for name, content in files.items():\n            (evidence / folder / name).write_bytes(content)\n    for name, content in case.initial.items():\n        (root / name).write_bytes(content)\n    env = {k: v for k, v in os.environ.items() if k in {\"PATH\", \"LANG\", \"LC_ALL\", \"TMPDIR\"}}\n    env.update(\n        LLM_BASE_URL=f\"http://127.0.0.1:{port}\",\n        LLM_API_KEY=\"local-smoke-only\",\n        LLM_MODEL=args.model_name,\n        CLAUDE_BIN=args.claude,\n        AGENT_WORKING_ROOT=str(root),\n        AGENT_MAX_CONCURRENT=\"1\",\n        AGENT_MAX_TIMEOUT_SECONDS=str(args.timeout),\n        AGENT_OUTPUT_TOKENS=\"512\",\n        AGENT_SYSTEM_PROMPT=SYSTEM_PROMPT,\n    )\n    params = StdioServerParameters(command=sys.executable, args=[\"-m\", \"agent_injector\"], env=env)\n    request = {\n        \"prompt\": case.prompt,\n        \"provider\": \"custom\",\n        \"allowed_tools\": [\"Read\", case.mutation_tool],\n        \"required_tools\": [\"Read\", case.mutation_tool],\n        \"timeout_seconds\": args.timeout,\n        \"max_turns\": 8,\n    }\n    save_json(evidence / \"request.json\", {\"tool\": \"llm_run\", \"arguments\": request})\n    save_json(\n        evidence / \"mcp-command.json\", {\"command\": params.command, \"args\": params.args, \"env\": env}\n    )\n    report = {\"scenario\": case.name, \"passed\": False}\n    wire: dict = {}\n    started = time.monotonic()\n    try:\n        with (evidence / \"mcp.stderr\").open(\"w\") as err:\n            async with stdio_client(params, errlog=err) as (read, write):\n                async with ClientSession(read, write) as session:\n                    initialized = await session.initialize()\n                    status = await session.call_tool(\"llm_status\", {})\n                    report[\"server\"] = initialized.server_info.model_dump(\n                        mode=\"json\", by_alias=True\n                    )\n                    report[\"status\"] = status.structured_content\n                    inference_started = time.monotonic()\n                    result = await session.call_tool(\n                        \"llm_run\", request, read_timeout_seconds=args.timeout + 30\n                    )\n                    report[\"elapsed_s\"] = round(time.monotonic() - inference_started, 3)\n                    wire = result.model_dump(mode=\"json\", by_alias=True)\n    except Exception as exc:\n        report[\"exception\"] = {\"type\": type(exc).__name__, \"message\": str(exc)}\n    finally:\n        report[\"elapsed_total_s\"] = round(time.monotonic() - started, 3)\n        save_json(evidence / \"mcp-result.json\", wire)\n        (evidence / \"actual\").mkdir()\n        actual = {}\n        for name in case.expected:\n            output = root / name\n            observed = output.read_bytes() if output.is_file() else None\n            actual[name] = observed\n            if observed is not None:\n                (evidence / \"actual\" / name).write_bytes(observed)\n        save_json(\n            evidence / \"files.json\",\n            {\n                name: {\n                    \"expected_sha256\": hashlib.sha256(expected).hexdigest(),\n                    \"actual_sha256\": hashlib.sha256(actual[name]).hexdigest()\n                    if actual[name] is not None\n                    else None,\n                }\n                for name, expected in case.expected.items()\n            },\n        )\n        try:\n            report.update(verify_case(case, actual, wire))\n        except Exception as exc:\n            report[\"verification_exception\"] = {\"type\": type(exc).__name__, \"message\": str(exc)}\n            report[\"passed\"] = False\n        if \"exception\" in report:\n            report[\"passed\"] = False\n        save_json(evidence / \"result.json\", report)\n    print(\n        json.dumps(\n            {\n                \"case\": evidence.name,\n                \"passed\": report[\"passed\"],\n                \"elapsed_s\": report.get(\"elapsed_s\"),\n            }\n        ),\n        flush=True,\n    )\n    return {\"case\": evidence.name, **report}\n\n\nasync def suite(args: argparse.Namespace, port: int) -> list[dict]:\n    reports = []\n    names = SCENARIOS if args.scenario == \"all\" else (args.scenario,)\n    for run in range(1, args.runs + 1):\n        for name in names:\n            evidence = args.log_dir / f\"run-{run:03d}-{name}\"\n            with tempfile.TemporaryDirectory(prefix=f\"agent-live-{name}-\") as directory:\n                reports.append(\n                    await exercise(args, make_case(name), Path(directory), evidence, port)\n                )\n            save_json(args.log_dir / \"cases.json\", reports)\n    return reports\n\n\ndef positive(value: str) -> int:\n    number = int(value)\n    if number < 1:\n        raise argparse.ArgumentTypeError(\"must be positive\")\n    return number\n\n\ndef bounded_timeout(value: str) -> int:\n    number = positive(value)\n    if number > 1200:\n        raise argparse.ArgumentTypeError(\"must not exceed 1200 seconds\")\n    return number\n\n\ndef executable_version(command: str) -> str:\n    result = subprocess.run([command, \"--version\"], capture_output=True, text=True, timeout=15)\n    if result.returncode:\n        raise RuntimeError(f\"Version check failed for {command}\")\n    return (result.stdout + result.stderr).strip()\n\n\ndef main() -> None:\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"--claude\", required=True)\n    parser.add_argument(\"--llama-server\", required=True)\n    parser.add_argument(\"--model-file\", type=Path, required=True)\n    parser.add_argument(\"--model-name\", default=\"qwen3-4b-instruct-2507\")\n    parser.add_argument(\"--log-dir\", type=Path, required=True)\n    parser.add_argument(\"--scenario\", choices=(\"all\", *SCENARIOS), default=\"all\")\n    parser.add_argument(\"--runs\", type=positive, default=1)\n    parser.add_argument(\"--threads\", type=positive, default=4)\n    parser.add_argument(\"--timeout\", type=bounded_timeout, default=300)\n    args = parser.parse_args()\n    args.claude = str(Path(args.claude).resolve())\n    args.llama_server = str(Path(args.llama_server).resolve())\n    args.model_file = args.model_file.resolve()\n    args.log_dir = args.log_dir.resolve()\n    args.log_dir.mkdir(parents=True, exist_ok=False)\n    report: dict = {\"passed\": False, \"scenario\": args.scenario, \"runs\": args.runs, \"cases\": []}\n    proc = None\n    try:\n        with args.model_file.open(\"rb\") as model:\n            report[\"model_sha256\"] = hashlib.file_digest(model, \"sha256\").hexdigest()\n        report.update(\n            model_file=args.model_file.name,\n            model_name=args.model_name,\n            claude_version=executable_version(args.claude),\n            llama_version=executable_version(args.llama_server),\n            python_version=sys.version,\n            system_prompt=SYSTEM_PROMPT,\n        )\n        with socket.socket() as sock:\n            sock.bind((\"127.0.0.1\", 0))\n            port = sock.getsockname()[1]\n        command = [\n            args.llama_server,\n            \"-m\",\n            str(args.model_file),\n            \"--alias\",\n            args.model_name,\n            \"--host\",\n            \"127.0.0.1\",\n            \"--port\",\n            str(port),\n            \"-c\",\n            \"16384\",\n            \"-t\",\n            str(args.threads),\n            \"-ngl\",\n            \"0\",\n            \"-np\",\n            \"1\",\n            \"--jinja\",\n            \"--chat-template-kwargs\",\n            '{\"enable_thinking\":false}',\n            \"--temp\",\n            \"0.7\",\n            \"--top-p\",\n            \"0.8\",\n            \"--top-k\",\n            \"20\",\n            \"--min-p\",\n            \"0\",\n            \"--seed\",\n            \"42\",\n            \"--no-webui\",\n            \"--api-key\",\n            \"local-smoke-only\",\n        ]\n        report[\"server_command\"] = command\n        save_json(args.log_dir / \"command.json\", command)\n        save_json(args.log_dir / \"provenance.json\", report)\n        with (args.log_dir / \"llama-server.log\").open(\"w\") as log:\n            proc = subprocess.Popen(command, stdout=log, stderr=log)\n            http = urllib.request.build_opener(urllib.request.ProxyHandler({}))\n            deadline = time.monotonic() + 120\n            while True:\n                if proc.poll() is not None:\n                    raise RuntimeError(\"Model server exited; inspect llama-server.log\")\n                try:\n                    with http.open(f\"http://127.0.0.1:{port}/health\", timeout=1) as response:\n                        if response.status == 200:\n                            break\n                except OSError:\n                    if time.monotonic() > deadline:\n                        raise RuntimeError(\"Model server startup timed out\") from None\n                    time.sleep(0.2)\n            report[\"cases\"] = asyncio.run(suite(args, port))\n            report[\"passed\"] = all(case[\"passed\"] for case in report[\"cases\"])\n    except BaseException as exc:\n        report[\"exception\"] = {\"type\": type(exc).__name__, \"message\": str(exc)}\n        raise\n    finally:\n        if proc is not None:\n            proc.terminate()\n            try:\n                proc.wait(timeout=5)\n            except subprocess.TimeoutExpired:\n                proc.kill()\n                proc.wait()\n        save_json(args.log_dir / \"summary.json\", report)\n    print(json.dumps({\"passed\": report[\"passed\"], \"cases\": len(report[\"cases\"])}), flush=True)\n    if not report[\"passed\"]:\n        raise SystemExit(1)\n\n\nif __name__ == \"__main__\":\n    main()\n",
+  "driver_sha256": "776db0230efbc19d00d5f7b464f1dfe4b145d7e7baf0019eb52ee696b667ed76",
+  "case_evidence": [
+    {
+      "id": "run-001-code",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read sum.py. Fix inclusive_sum so the upper bound is included: use Edit to replace range(1, n) with range(1, n + 1), preserving every other byte and the comment. Read sum.py after editing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Edit"
+          ],
+          "required_tools": [
+            "Read",
+            "Edit"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "code",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-code-b9h360c5",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 41.082,
+        "elapsed_total_s": 42.485,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false,
+          "code_test_cases": false
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"eca520f3cc7d47deac6482c0c9d64f61\", \"status\": \"failed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 41.076, \"execution_seconds\": 41.076, \"exit_code\": 0, \"error\": {\"code\": \"required_tool_missing\", \"message\": \"Required tools did not return successful results\"}, \"result\": \"The file `sum.py` does not exist at the specified path. Please verify the correct path or provide the file content so I can proceed with the requested changes.\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"jE68o9EPpqumKTzSpIX5GdAqk2g08ORx\"}], \"tool_error_count\": 1, \"turns\": 2}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "eca520f3cc7d47deac6482c0c9d64f61",
+          "status": "failed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 41.076,
+          "execution_seconds": 41.076,
+          "exit_code": 0,
+          "error": {
+            "code": "required_tool_missing",
+            "message": "Required tools did not return successful results"
+          },
+          "result": "The file `sum.py` does not exist at the specified path. Please verify the correct path or provide the file content so I can proceed with the requested changes.",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {},
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "jE68o9EPpqumKTzSpIX5GdAqk2g08ORx"
+            }
+          ],
+          "tool_error_count": 1,
+          "turns": 2
+        },
+        "isError": true,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "sum.py": {
+          "expected_sha256": "8515943e1e071cc1cb981926262f573805bb853736568ef3ef1550510b3dde97",
+          "actual_sha256": "2d89b9f74fd1e6b5b932b71d4f3ffd45e06189bc7943d44fb893b1c074c3122c"
+        }
+      },
+      "before": {
+        "sum.py": "# marker=fd798926b578e0552a3cd4e5\ndef inclusive_sum(n):\n    return sum(range(1, n))\n"
+      },
+      "expected": {
+        "sum.py": "# marker=fd798926b578e0552a3cd4e5\ndef inclusive_sum(n):\n    return sum(range(1, n + 1))\n"
+      },
+      "actual": {
+        "sum.py": "# marker=fd798926b578e0552a3cd4e5\ndef inclusive_sum(n):\n    return sum(range(1, n))\n"
+      }
+    },
+    {
+      "id": "run-001-copy",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read input.txt. Use Write to create result.txt with exactly the same complete contents, preserving input.txt. Read result.txt after writing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Write"
+          ],
+          "required_tools": [
+            "Read",
+            "Write"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "copy",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-copy-5bu1sio2",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 48.452,
+        "elapsed_total_s": 50.02,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": false
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"4b97ea5d711341b1b9224212e8db22f3\", \"status\": \"completed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 48.446, \"execution_seconds\": 48.445, \"exit_code\": 0, \"error\": null, \"result\": \"DONE\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {\"input_tokens\": 1178, \"cache_creation_input_tokens\": 0, \"cache_read_input_tokens\": 3293, \"output_tokens\": 104}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"h3dkHsrAx6Kw5owWarNVp9I4VT8t6agQ\"}, {\"name\": \"Write\", \"id\": \"QJmy3CswuAkvcHacLSk1Lzz2YgbhVUBa\"}, {\"name\": \"Read\", \"id\": \"Wj3CGotO4Sr6eSWFikgwnNohehFOSJ5m\"}], \"tool_error_count\": 0, \"turns\": 4}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "4b97ea5d711341b1b9224212e8db22f3",
+          "status": "completed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 48.446,
+          "execution_seconds": 48.445,
+          "exit_code": 0,
+          "error": null,
+          "result": "DONE",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {
+            "input_tokens": 1178,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 3293,
+            "output_tokens": 104
+          },
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "h3dkHsrAx6Kw5owWarNVp9I4VT8t6agQ"
+            },
+            {
+              "name": "Write",
+              "id": "QJmy3CswuAkvcHacLSk1Lzz2YgbhVUBa"
+            },
+            {
+              "name": "Read",
+              "id": "Wj3CGotO4Sr6eSWFikgwnNohehFOSJ5m"
+            }
+          ],
+          "tool_error_count": 0,
+          "turns": 4
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "input.txt": {
+          "expected_sha256": "bc633d2fd83dee3777f8cfd4a55504eb7cc7b416ec2146a69038a452f0ef9ebd",
+          "actual_sha256": "bc633d2fd83dee3777f8cfd4a55504eb7cc7b416ec2146a69038a452f0ef9ebd"
+        },
+        "result.txt": {
+          "expected_sha256": "bc633d2fd83dee3777f8cfd4a55504eb7cc7b416ec2146a69038a452f0ef9ebd",
+          "actual_sha256": "ce63480ef15c91fa89bdfa6a7a8367c57f0e4ab20e48e5d9d4ce53ce7025acf4"
+        }
+      },
+      "before": {
+        "input.txt": "first line\nmarker=ce35ec10520ee1a5de284ee7\nlast line\n"
+      },
+      "expected": {
+        "input.txt": "first line\nmarker=ce35ec10520ee1a5de284ee7\nlast line\n",
+        "result.txt": "first line\nmarker=ce35ec10520ee1a5de284ee7\nlast line\n"
+      },
+      "actual": {
+        "input.txt": "first line\nmarker=ce35ec10520ee1a5de284ee7\nlast line\n",
+        "result.txt": "1 first line\n2 marker=ce35ec10520ee1a5de284ee7\n3 last line\n4\n"
+      }
+    },
+    {
+      "id": "run-001-edit",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read config.txt. Use Edit to replace only retry_limit=3 with retry_limit=7. Preserve every other byte. Read config.txt after editing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Edit"
+          ],
+          "required_tools": [
+            "Read",
+            "Edit"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "edit",
+        "passed": true,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-edit-6u6ocv2w",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 49.222,
+        "elapsed_total_s": 50.635,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": true
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"889389bc050247eb825085780e97e8c5\", \"status\": \"completed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 49.215, \"execution_seconds\": 49.215, \"exit_code\": 0, \"error\": null, \"result\": \"DONE\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {\"input_tokens\": 1288, \"cache_creation_input_tokens\": 0, \"cache_read_input_tokens\": 3534, \"output_tokens\": 91}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"RsK3YtCCLzRc20ifETf4HI44KG26Ftjo\"}, {\"name\": \"Edit\", \"id\": \"MuQ8yGE4iomiFMhpMnsBQomwOGINIsKS\"}, {\"name\": \"Read\", \"id\": \"3DqOqjDE6yKLkDeQtJG1fmMNWyqqOGnh\"}], \"tool_error_count\": 0, \"turns\": 4}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "889389bc050247eb825085780e97e8c5",
+          "status": "completed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 49.215,
+          "execution_seconds": 49.215,
+          "exit_code": 0,
+          "error": null,
+          "result": "DONE",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {
+            "input_tokens": 1288,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 3534,
+            "output_tokens": 91
+          },
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "RsK3YtCCLzRc20ifETf4HI44KG26Ftjo"
+            },
+            {
+              "name": "Edit",
+              "id": "MuQ8yGE4iomiFMhpMnsBQomwOGINIsKS"
+            },
+            {
+              "name": "Read",
+              "id": "3DqOqjDE6yKLkDeQtJG1fmMNWyqqOGnh"
+            }
+          ],
+          "tool_error_count": 0,
+          "turns": 4
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "config.txt": {
+          "expected_sha256": "aa5d021bc5aecfedbd878a3bec830d49108334b1c623279ce54a29b3d337a014",
+          "actual_sha256": "aa5d021bc5aecfedbd878a3bec830d49108334b1c623279ce54a29b3d337a014"
+        }
+      },
+      "before": {
+        "config.txt": "enabled=true\nmarker=724556ee7ebd6ebc857e4c9a\nretry_limit=3\nmode=careful\n"
+      },
+      "expected": {
+        "config.txt": "enabled=true\nmarker=724556ee7ebd6ebc857e4c9a\nretry_limit=7\nmode=careful\n"
+      },
+      "actual": {
+        "config.txt": "enabled=true\nmarker=724556ee7ebd6ebc857e4c9a\nretry_limit=7\nmode=careful\n"
+      }
+    },
+    {
+      "id": "run-002-code",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read sum.py. Fix inclusive_sum so the upper bound is included: use Edit to replace range(1, n) with range(1, n + 1), preserving every other byte and the comment. Read sum.py after editing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Edit"
+          ],
+          "required_tools": [
+            "Read",
+            "Edit"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "code",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-code-_whjk25p",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 14.016,
+        "elapsed_total_s": 15.402,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false,
+          "code_test_cases": false
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"4fbb776d1d364e20a3ed05c1008159a0\", \"status\": \"failed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 14.013, \"execution_seconds\": 14.013, \"exit_code\": 0, \"error\": {\"code\": \"required_tool_missing\", \"message\": \"Required tools did not return successful results\"}, \"result\": \"The file `/home/fh/sum.py` does not exist in the current directory. I cannot proceed with the edit as the file is not found. Please verify the correct path or provide the file content if available.\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"GmVitnVCH143xTenxLqsxLK8SVsSwBK0\"}], \"tool_error_count\": 1, \"turns\": 2}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "4fbb776d1d364e20a3ed05c1008159a0",
+          "status": "failed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 14.013,
+          "execution_seconds": 14.013,
+          "exit_code": 0,
+          "error": {
+            "code": "required_tool_missing",
+            "message": "Required tools did not return successful results"
+          },
+          "result": "The file `/home/fh/sum.py` does not exist in the current directory. I cannot proceed with the edit as the file is not found. Please verify the correct path or provide the file content if available.",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {},
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "GmVitnVCH143xTenxLqsxLK8SVsSwBK0"
+            }
+          ],
+          "tool_error_count": 1,
+          "turns": 2
+        },
+        "isError": true,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "sum.py": {
+          "expected_sha256": "4cc1c79485a81e6137a2b5c3f97b5bd5d5369d9b3b0c427d1a2b7ac004acf396",
+          "actual_sha256": "a93cbd91270390bb548eb6ceb54b46f6c3194f5dbdc73082c090468b3dbf8629"
+        }
+      },
+      "before": {
+        "sum.py": "# marker=618b64799118ce65dafd5d0e\ndef inclusive_sum(n):\n    return sum(range(1, n))\n"
+      },
+      "expected": {
+        "sum.py": "# marker=618b64799118ce65dafd5d0e\ndef inclusive_sum(n):\n    return sum(range(1, n + 1))\n"
+      },
+      "actual": {
+        "sum.py": "# marker=618b64799118ce65dafd5d0e\ndef inclusive_sum(n):\n    return sum(range(1, n))\n"
+      }
+    },
+    {
+      "id": "run-002-copy",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read input.txt. Use Write to create result.txt with exactly the same complete contents, preserving input.txt. Read result.txt after writing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Write"
+          ],
+          "required_tools": [
+            "Read",
+            "Write"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "copy",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-copy-c060xd24",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 30.025,
+        "elapsed_total_s": 31.425,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": false
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"ca77004735334208ab54410833dfb5e4\", \"status\": \"completed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 30.018, \"execution_seconds\": 30.018, \"exit_code\": 0, \"error\": null, \"result\": \"It appears that `input.txt` does not exist, and as a result, `result.txt` was created but remains empty. Since there was no content to preserve from `input.txt`, the output file `result.txt` is empty. I have verified the file's contents, and it is indeed empty.\\n\\nIf you have additional instructions or a different file to process, please let me know.\\n\\nDONE\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {\"input_tokens\": 179, \"cache_creation_input_tokens\": 0, \"cache_read_input_tokens\": 4181, \"output_tokens\": 149}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"onxWrz3IRWXuRui5iRE6bIX1dJgd5e5N\"}, {\"name\": \"Write\", \"id\": \"5biuvu6EWL663fIWZEOTH3lPefqruZch\"}, {\"name\": \"Read\", \"id\": \"gXtc0eb1t3Kh7EfLp6cotvBOK33IHayU\"}], \"tool_error_count\": 1, \"turns\": 4}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "ca77004735334208ab54410833dfb5e4",
+          "status": "completed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 30.018,
+          "execution_seconds": 30.018,
+          "exit_code": 0,
+          "error": null,
+          "result": "It appears that `input.txt` does not exist, and as a result, `result.txt` was created but remains empty. Since there was no content to preserve from `input.txt`, the output file `result.txt` is empty. I have verified the file's contents, and it is indeed empty.\n\nIf you have additional instructions or a different file to process, please let me know.\n\nDONE",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {
+            "input_tokens": 179,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 4181,
+            "output_tokens": 149
+          },
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "onxWrz3IRWXuRui5iRE6bIX1dJgd5e5N"
+            },
+            {
+              "name": "Write",
+              "id": "5biuvu6EWL663fIWZEOTH3lPefqruZch"
+            },
+            {
+              "name": "Read",
+              "id": "gXtc0eb1t3Kh7EfLp6cotvBOK33IHayU"
+            }
+          ],
+          "tool_error_count": 1,
+          "turns": 4
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "input.txt": {
+          "expected_sha256": "87e37a6c798533c3c008993f94194d599cbaf5f152ca8aa701ad2e23e1b8cb77",
+          "actual_sha256": "87e37a6c798533c3c008993f94194d599cbaf5f152ca8aa701ad2e23e1b8cb77"
+        },
+        "result.txt": {
+          "expected_sha256": "87e37a6c798533c3c008993f94194d599cbaf5f152ca8aa701ad2e23e1b8cb77",
+          "actual_sha256": null
+        }
+      },
+      "before": {
+        "input.txt": "first line\nmarker=bf2f6f34a0eea2d8206f1bb1\nlast line\n"
+      },
+      "expected": {
+        "input.txt": "first line\nmarker=bf2f6f34a0eea2d8206f1bb1\nlast line\n",
+        "result.txt": "first line\nmarker=bf2f6f34a0eea2d8206f1bb1\nlast line\n"
+      },
+      "actual": {
+        "input.txt": "first line\nmarker=bf2f6f34a0eea2d8206f1bb1\nlast line\n"
+      }
+    },
+    {
+      "id": "run-002-edit",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read config.txt. Use Edit to replace only retry_limit=3 with retry_limit=7. Preserve every other byte. Read config.txt after editing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Edit"
+          ],
+          "required_tools": [
+            "Read",
+            "Edit"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "edit",
+        "passed": true,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-edit-vkq019gq",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 23.616,
+        "elapsed_total_s": 25.069,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": true
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"814cecc292ad4f1bad10f2e1694b3af5\", \"status\": \"completed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 23.611, \"execution_seconds\": 23.611, \"exit_code\": 0, \"error\": null, \"result\": \"DONE\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {\"input_tokens\": 262, \"cache_creation_input_tokens\": 0, \"cache_read_input_tokens\": 4564, \"output_tokens\": 91}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"qDJ8ZM8MkIJK9GUqOiChoCp36uhpbo0x\"}, {\"name\": \"Edit\", \"id\": \"54neDgOdmG57yAmDR1Me5PGpMmhLCDcW\"}, {\"name\": \"Read\", \"id\": \"NAmjoiQW6ZLwNGLkgesN5JqIq6xWH54v\"}], \"tool_error_count\": 0, \"turns\": 4}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "814cecc292ad4f1bad10f2e1694b3af5",
+          "status": "completed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 23.611,
+          "execution_seconds": 23.611,
+          "exit_code": 0,
+          "error": null,
+          "result": "DONE",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {
+            "input_tokens": 262,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 4564,
+            "output_tokens": 91
+          },
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "qDJ8ZM8MkIJK9GUqOiChoCp36uhpbo0x"
+            },
+            {
+              "name": "Edit",
+              "id": "54neDgOdmG57yAmDR1Me5PGpMmhLCDcW"
+            },
+            {
+              "name": "Read",
+              "id": "NAmjoiQW6ZLwNGLkgesN5JqIq6xWH54v"
+            }
+          ],
+          "tool_error_count": 0,
+          "turns": 4
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "config.txt": {
+          "expected_sha256": "8e20fd6d0f1461493318178664a1011f3a83095a14a0b590305c827335a216b1",
+          "actual_sha256": "8e20fd6d0f1461493318178664a1011f3a83095a14a0b590305c827335a216b1"
+        }
+      },
+      "before": {
+        "config.txt": "enabled=true\nmarker=05370c6978594a725cded381\nretry_limit=3\nmode=careful\n"
+      },
+      "expected": {
+        "config.txt": "enabled=true\nmarker=05370c6978594a725cded381\nretry_limit=7\nmode=careful\n"
+      },
+      "actual": {
+        "config.txt": "enabled=true\nmarker=05370c6978594a725cded381\nretry_limit=7\nmode=careful\n"
+      }
+    },
+    {
+      "id": "run-003-code",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read sum.py. Fix inclusive_sum so the upper bound is included: use Edit to replace range(1, n) with range(1, n + 1), preserving every other byte and the comment. Read sum.py after editing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Edit"
+          ],
+          "required_tools": [
+            "Read",
+            "Edit"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "code",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-code-el73aj60",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 14.89,
+        "elapsed_total_s": 16.281,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false,
+          "code_test_cases": false
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"8164135e83704761b94ac3cb9cfad0fe\", \"status\": \"failed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 14.884, \"execution_seconds\": 14.884, \"exit_code\": 0, \"error\": {\"code\": \"required_tool_missing\", \"message\": \"Required tools did not return successful results\"}, \"result\": \"The file `/home/fh/sum.py` does not exist in the current directory. I cannot proceed with the edit as the file is not available. Please verify the correct file path or provide the file content directly.\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"qsv5uV4RjwLLI1XxSpXJIjP1Wn2EXh2O\"}], \"tool_error_count\": 1, \"turns\": 2}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "8164135e83704761b94ac3cb9cfad0fe",
+          "status": "failed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 14.884,
+          "execution_seconds": 14.884,
+          "exit_code": 0,
+          "error": {
+            "code": "required_tool_missing",
+            "message": "Required tools did not return successful results"
+          },
+          "result": "The file `/home/fh/sum.py` does not exist in the current directory. I cannot proceed with the edit as the file is not available. Please verify the correct file path or provide the file content directly.",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {},
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "qsv5uV4RjwLLI1XxSpXJIjP1Wn2EXh2O"
+            }
+          ],
+          "tool_error_count": 1,
+          "turns": 2
+        },
+        "isError": true,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "sum.py": {
+          "expected_sha256": "b198afa91515de3c3c90e48fd3504ea7ad8124fbd07276935349b3531e092370",
+          "actual_sha256": "28492af2684c63213016b375a83be260ff4795255bd3a356cc22760c49d8a0aa"
+        }
+      },
+      "before": {
+        "sum.py": "# marker=715e26f6e469fb98ba16c4ac\ndef inclusive_sum(n):\n    return sum(range(1, n))\n"
+      },
+      "expected": {
+        "sum.py": "# marker=715e26f6e469fb98ba16c4ac\ndef inclusive_sum(n):\n    return sum(range(1, n + 1))\n"
+      },
+      "actual": {
+        "sum.py": "# marker=715e26f6e469fb98ba16c4ac\ndef inclusive_sum(n):\n    return sum(range(1, n))\n"
+      }
+    },
+    {
+      "id": "run-003-copy",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read input.txt. Use Write to create result.txt with exactly the same complete contents, preserving input.txt. Read result.txt after writing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Write"
+          ],
+          "required_tools": [
+            "Read",
+            "Write"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "copy",
+        "passed": false,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-copy-30bw7orv",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 13.97,
+        "elapsed_total_s": 15.322,
+        "checks": {
+          "mcp_success": false,
+          "completed": false,
+          "no_task_error": false,
+          "no_tool_errors": false,
+          "at_least_three_tool_calls": false,
+          "read_before_change": true,
+          "mutation_tool_used": false,
+          "final_read": true,
+          "exact_files": false
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"068196e9b4914f9c9054076d8da22d68\", \"status\": \"failed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 13.964, \"execution_seconds\": 13.964, \"exit_code\": 0, \"error\": {\"code\": \"required_tool_missing\", \"message\": \"Required tools did not return successful results\"}, \"result\": \"The file `input.txt` does not exist in the current directory. Since there is no content to preserve, I cannot create `result.txt` with the same contents. Please provide the file or confirm if you'd like me to proceed differently.\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"EbCtuqvTzfDxjKmsCUCfsh3YL244k77R\"}], \"tool_error_count\": 1, \"turns\": 2}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "068196e9b4914f9c9054076d8da22d68",
+          "status": "failed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 13.964,
+          "execution_seconds": 13.964,
+          "exit_code": 0,
+          "error": {
+            "code": "required_tool_missing",
+            "message": "Required tools did not return successful results"
+          },
+          "result": "The file `input.txt` does not exist in the current directory. Since there is no content to preserve, I cannot create `result.txt` with the same contents. Please provide the file or confirm if you'd like me to proceed differently.",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {},
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "EbCtuqvTzfDxjKmsCUCfsh3YL244k77R"
+            }
+          ],
+          "tool_error_count": 1,
+          "turns": 2
+        },
+        "isError": true,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "input.txt": {
+          "expected_sha256": "2af85beda6be92518da914f156ad40c0d2e35375184c9569757bdf59a7cc9641",
+          "actual_sha256": "2af85beda6be92518da914f156ad40c0d2e35375184c9569757bdf59a7cc9641"
+        },
+        "result.txt": {
+          "expected_sha256": "2af85beda6be92518da914f156ad40c0d2e35375184c9569757bdf59a7cc9641",
+          "actual_sha256": null
+        }
+      },
+      "before": {
+        "input.txt": "first line\nmarker=c8d0204bddfa5fb8564db6e2\nlast line\n"
+      },
+      "expected": {
+        "input.txt": "first line\nmarker=c8d0204bddfa5fb8564db6e2\nlast line\n",
+        "result.txt": "first line\nmarker=c8d0204bddfa5fb8564db6e2\nlast line\n"
+      },
+      "actual": {
+        "input.txt": "first line\nmarker=c8d0204bddfa5fb8564db6e2\nlast line\n"
+      }
+    },
+    {
+      "id": "run-003-edit",
+      "request.json": {
+        "tool": "llm_run",
+        "arguments": {
+          "prompt": "Read config.txt. Use Edit to replace only retry_limit=3 with retry_limit=7. Preserve every other byte. Read config.txt after editing, then reply DONE.",
+          "provider": "custom",
+          "allowed_tools": [
+            "Read",
+            "Edit"
+          ],
+          "required_tools": [
+            "Read",
+            "Edit"
+          ],
+          "timeout_seconds": 300,
+          "max_turns": 8
+        }
+      },
+      "result.json": {
+        "scenario": "edit",
+        "passed": true,
+        "server": {
+          "name": "agent-injector",
+          "title": null,
+          "version": "0.2.0",
+          "description": null,
+          "websiteUrl": null,
+          "icons": null
+        },
+        "status": {
+          "version": "0.2.0",
+          "claude_available": true,
+          "providers": [
+            {
+              "name": "custom",
+              "model": "qwen3-4b-instruct-2507"
+            }
+          ],
+          "default_provider": null,
+          "default_model": null,
+          "working_root": "/tmp/agent-live-edit-7irio0hr",
+          "allowed_tools": [
+            "Bash",
+            "Edit",
+            "Glob",
+            "Grep",
+            "Read",
+            "Write"
+          ],
+          "limits": {
+            "concurrent": 1,
+            "queued": 32,
+            "retained": 128,
+            "timeout_seconds": 300,
+            "turns": 100,
+            "output_bytes": 1048576,
+            "retention_seconds": 900
+          }
+        },
+        "elapsed_s": 22.631,
+        "elapsed_total_s": 23.947,
+        "checks": {
+          "mcp_success": true,
+          "completed": true,
+          "no_task_error": true,
+          "no_tool_errors": true,
+          "at_least_three_tool_calls": true,
+          "read_before_change": true,
+          "mutation_tool_used": true,
+          "final_read": true,
+          "exact_files": true
+        },
+        "code_result": null
+      },
+      "mcp-result.json": {
+        "_meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"54d383eed96b4e008a2fb434e0ad1c64\", \"status\": \"completed\", \"provider\": \"custom\", \"model\": \"qwen3-4b-instruct-2507\", \"elapsed_seconds\": 22.625, \"execution_seconds\": 22.625, \"exit_code\": 0, \"error\": null, \"result\": \"DONE\", \"stderr\": \"[claude-code:unrecognized_model] {\\\"model\\\":\\\"qwen3-4b-instruct-2507\\\",\\\"query_source\\\":\\\"sdk\\\"}\\n\", \"usage\": {\"input_tokens\": 260, \"cache_creation_input_tokens\": 0, \"cache_read_input_tokens\": 4562, \"output_tokens\": 91}, \"tool_calls\": [{\"name\": \"Read\", \"id\": \"uAw3OLHsggbqECAmdLW7inmwGXsB33Sw\"}, {\"name\": \"Edit\", \"id\": \"SOu3Qn4qkMwBsZZeSOBpTJwrre0yEeZE\"}, {\"name\": \"Read\", \"id\": \"3q7cXMhxGcaue37cimz7G7PdjWWiqex7\"}], \"tool_error_count\": 0, \"turns\": 4}",
+            "annotations": null,
+            "_meta": null
+          }
+        ],
+        "structuredContent": {
+          "task_id": "54d383eed96b4e008a2fb434e0ad1c64",
+          "status": "completed",
+          "provider": "custom",
+          "model": "qwen3-4b-instruct-2507",
+          "elapsed_seconds": 22.625,
+          "execution_seconds": 22.625,
+          "exit_code": 0,
+          "error": null,
+          "result": "DONE",
+          "stderr": "[claude-code:unrecognized_model] {\"model\":\"qwen3-4b-instruct-2507\",\"query_source\":\"sdk\"}\n",
+          "usage": {
+            "input_tokens": 260,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 4562,
+            "output_tokens": 91
+          },
+          "tool_calls": [
+            {
+              "name": "Read",
+              "id": "uAw3OLHsggbqECAmdLW7inmwGXsB33Sw"
+            },
+            {
+              "name": "Edit",
+              "id": "SOu3Qn4qkMwBsZZeSOBpTJwrre0yEeZE"
+            },
+            {
+              "name": "Read",
+              "id": "3q7cXMhxGcaue37cimz7G7PdjWWiqex7"
+            }
+          ],
+          "tool_error_count": 0,
+          "turns": 4
+        },
+        "isError": false,
+        "resultType": "complete"
+      },
+      "files.json": {
+        "config.txt": {
+          "expected_sha256": "462b0f0a61d14e0deab3a6eda2e322b033de9717edafbdcd3b0b16096d67417f",
+          "actual_sha256": "462b0f0a61d14e0deab3a6eda2e322b033de9717edafbdcd3b0b16096d67417f"
+        }
+      },
+      "before": {
+        "config.txt": "enabled=true\nmarker=d78ce4eaa748b645c2c55a02\nretry_limit=3\nmode=careful\n"
+      },
+      "expected": {
+        "config.txt": "enabled=true\nmarker=d78ce4eaa748b645c2c55a02\nretry_limit=7\nmode=careful\n"
+      },
+      "actual": {
+        "config.txt": "enabled=true\nmarker=d78ce4eaa748b645c2c55a02\nretry_limit=7\nmode=careful\n"
+      }
+    }
+  ],
+  "driver_snapshot_note": "Snapshot retains the initial prompts and checks; post-launch formatting and asynchronous evidence-directory creation did not change inference logic."
+}

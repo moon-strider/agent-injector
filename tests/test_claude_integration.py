@@ -173,21 +173,21 @@ async def test_real_claude_reads_and_writes_file(settings, tmp_path, monkeypatch
             ),
             40,
         )
-        assert not result.isError, result.structuredContent
+        assert not result.is_error, result.structured_content
         assert (tmp_path / "result.txt").exists(), {
-            "result": result.structuredContent,
+            "result": result.structured_content,
             "tools": [t["name"] for t in requests[0].get("tools", [])],
             "messages": requests[-1].get("messages"),
         }
         assert (tmp_path / "result.txt").read_text() == marker
-        assert [entry["name"] for entry in result.structuredContent["tool_calls"]] == [
+        assert [entry["name"] for entry in result.structured_content["tool_calls"]] == [
             "Read",
             "Write",
         ]
         assert len(requests) == 3
         assert all(r["model"] == "fixture-model" for r in requests)
         assert {t["name"] for t in requests[0]["tools"]} == {"Read", "Write"}
-        assert result.structuredContent["result"] == "DONE"
+        assert result.structured_content["result"] == "DONE"
     finally:
         await app.manager.close()
         await asyncio.to_thread(http.shutdown)
